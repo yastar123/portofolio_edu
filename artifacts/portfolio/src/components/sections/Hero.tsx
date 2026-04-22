@@ -1,19 +1,19 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { ArrowDownRight, Download, ArrowRight } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-function KineticText({ text }: { text: string }) {
+function KineticText({ text, delay = 0, yOffset = "100%" }: { text: string, delay?: number, yOffset?: string }) {
   return (
     <div className="overflow-hidden flex">
       {text.split("").map((char, index) => (
         <motion.span
           key={index}
-          initial={{ y: "100%" }}
-          animate={{ y: 0 }}
+          initial={{ y: yOffset, rotate: 10, opacity: 0 }}
+          animate={{ y: 0, rotate: 0, opacity: 1 }}
           transition={{
-            duration: 0.8,
+            duration: 1.2,
             ease: [0.16, 1, 0.3, 1],
-            delay: 0.8 + index * 0.03,
+            delay: delay + index * 0.04,
           }}
           className="inline-block"
         >
@@ -24,10 +24,39 @@ function KineticText({ text }: { text: string }) {
   );
 }
 
+function Marquee() {
+  return (
+    <div className="relative w-full overflow-hidden bg-foreground text-background py-3 md:py-4 flex items-center mt-auto border-t border-border/20 z-20 group">
+      <motion.div 
+        className="flex whitespace-nowrap gap-8 pr-8 text-xs md:text-sm font-mono uppercase tracking-widest group-hover:[animation-play-state:paused]"
+        animate={{ x: ["0%", "-50%"] }}
+        transition={{ duration: 20, ease: "linear", repeat: Infinity }}
+      >
+        {[...Array(6)].map((_, i) => (
+          <span key={i} className="flex items-center gap-8">
+            <span>FULL STACK DEVELOPER</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+            <span>BANDAR LAMPUNG</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+            <span>AVAILABLE FOR WORK</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+          </span>
+        ))}
+      </motion.div>
+    </div>
+  );
+}
+
 export default function Hero() {
+  const containerRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 1000], [0, 250]);
-  const opacity = useTransform(scrollY, [0, 400], [1, 0]);
+  
+  const y = useTransform(scrollY, [0, 1000], [0, 300]);
+  const opacity = useTransform(scrollY, [0, 500], [1, 0]);
+  const scale = useTransform(scrollY, [0, 500], [1, 0.9]);
+  
+  // Use spring for smoother scroll-linked transforms
+  const smoothY = useSpring(y, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
   const scrollTo = (id: string) => {
     const element = document.getElementById(id);
@@ -37,39 +66,50 @@ export default function Hero() {
   };
 
   return (
-    <section id="home" className="relative min-h-[100dvh] flex flex-col justify-center px-6 md:px-12 lg:px-24 pt-32 overflow-hidden bg-background">
-      <motion.div style={{ y }} className="max-w-7xl mx-auto w-full z-10 relative">
+    <section id="home" ref={containerRef} className="relative min-h-[100dvh] flex flex-col justify-between pt-32 overflow-hidden bg-background">
+      
+      {/* Background ambient gradient */}
+      <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-primary/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-foreground/5 rounded-full blur-[100px] pointer-events-none mix-blend-screen" />
+
+      <motion.div 
+        style={{ y: smoothY, opacity, scale }} 
+        className="px-6 md:px-12 lg:px-24 max-w-7xl mx-auto w-full z-10 relative flex-1 flex flex-col justify-center pb-20"
+      >
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-wrap items-center gap-4 mb-8"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 1, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-wrap items-center gap-4 mb-8 md:mb-12"
         >
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-muted rounded-full border border-border">
-            <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+          <div className="flex items-center gap-3 px-4 py-2 bg-muted/80 backdrop-blur-sm rounded-full border border-border/50 group hover:border-primary/50 transition-colors">
+            <div className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+            </div>
+            <span className="font-mono text-[10px] md:text-xs uppercase tracking-widest text-muted-foreground group-hover:text-foreground transition-colors">
               Currently building @ Freelance + KM ITERA
             </span>
           </div>
         </motion.div>
         
-        <h1 className="text-[12vw] md:text-[9vw] lg:text-[8vw] leading-[0.85] font-display font-bold uppercase tracking-tighter flex flex-col gap-2">
-          <KineticText text="End-to-End" />
+        <h1 className="text-[14vw] md:text-[11vw] lg:text-[10vw] leading-[0.8] font-display font-bold uppercase tracking-tighter flex flex-col gap-1 md:gap-3">
+          <KineticText text="End-to-End" delay={0.5} yOffset="120%" />
           <div className="flex items-center gap-4 md:gap-8">
-            <KineticText text="Web" />
+            <KineticText text="Web" delay={0.7} yOffset="120%" />
             <motion.div 
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
-              transition={{ duration: 1, delay: 1.2, ease: [0.16, 1, 0.3, 1] }}
-              className="h-[8px] md:h-[12px] bg-primary flex-1 origin-left mt-4"
+              transition={{ duration: 1.5, delay: 1.2, ease: [0.76, 0, 0.24, 1] }}
+              className="h-[10px] md:h-[1vw] bg-primary flex-1 origin-left mt-2 md:mt-[2vw]"
             />
           </div>
           <div className="flex items-baseline gap-2">
-            <KineticText text="Architecture" />
+            <KineticText text="Architecture" delay={0.9} yOffset="120%" />
             <motion.span 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 1.5 }}
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 1.8, type: "spring" }}
               className="text-primary"
             >
               .
@@ -78,23 +118,23 @@ export default function Hero() {
         </h1>
 
         <motion.div 
-          className="mt-12 md:mt-24 grid lg:grid-cols-2 gap-12 lg:gap-24 items-start"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1.4 }}
+          className="mt-16 md:mt-24 grid lg:grid-cols-12 gap-12 lg:gap-8 items-start"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, delay: 1.5, ease: [0.16, 1, 0.3, 1] }}
         >
-          <div className="max-w-xl">
+          <div className="lg:col-span-7 max-w-xl">
             <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed font-sans font-light">
               Saya Edu Juanda Pratama, Full Stack Developer dari Bandar Lampung. 
-              Membangun solusi digital yang scalable, aman, dan berfokus pada <span className="text-foreground font-medium">performa</span> & <span className="text-foreground font-medium">user experience</span>.
+              Membangun solusi digital yang scalable, aman, dan berfokus pada <span className="text-foreground font-medium underline decoration-primary/50 underline-offset-4">performa</span> & <span className="text-foreground font-medium underline decoration-primary/50 underline-offset-4">user experience</span>.
             </p>
             
-            <div className="flex flex-wrap gap-4 mt-8">
+            <div className="flex flex-wrap gap-4 mt-10">
               <button 
                 onClick={() => scrollTo("work")}
-                className="group relative flex items-center justify-center gap-3 px-8 py-4 bg-foreground text-background font-mono text-sm uppercase tracking-widest overflow-hidden"
+                className="group relative overflow-hidden flex items-center justify-center gap-3 px-8 py-4 bg-foreground text-background font-mono text-xs uppercase tracking-widest rounded-full"
               >
-                <div className="absolute inset-0 bg-primary translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+                <div className="absolute inset-0 bg-primary translate-y-[100%] rounded-full group-hover:translate-y-0 transition-transform duration-500 ease-[0.76,0,0.24,1]" />
                 <span className="relative z-10 flex items-center gap-2">
                   Lihat Karya
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -103,7 +143,7 @@ export default function Hero() {
               
               <a 
                 href="#" 
-                className="group flex items-center justify-center gap-3 px-8 py-4 border border-border hover:border-foreground text-foreground font-mono text-sm uppercase tracking-widest transition-colors"
+                className="group flex items-center justify-center gap-3 px-8 py-4 border border-border hover:border-foreground text-foreground font-mono text-xs uppercase tracking-widest rounded-full transition-colors duration-500"
               >
                 <span>Unduh CV</span>
                 <Download className="w-4 h-4 group-hover:-translate-y-1 transition-transform" />
@@ -111,28 +151,36 @@ export default function Hero() {
             </div>
           </div>
           
-          <div className="grid grid-cols-2 gap-8 lg:ml-auto">
-            <div>
-              <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-2">Stack</p>
-              <p className="font-display text-lg font-bold">React / Next.js</p>
-              <p className="font-display text-lg font-bold">Laravel / PHP</p>
-              <p className="font-display text-lg font-bold text-muted-foreground">PostgreSQL</p>
+          <div className="lg:col-span-5 grid grid-cols-2 gap-8 lg:ml-auto">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="h-[1px] w-4 bg-primary" />
+                <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">Stack</p>
+              </div>
+              <p className="font-display text-xl md:text-2xl font-bold tracking-tight">React / Next.js</p>
+              <p className="font-display text-xl md:text-2xl font-bold tracking-tight">Laravel / PHP</p>
+              <p className="font-display text-xl md:text-2xl font-bold tracking-tight text-muted-foreground">PostgreSQL</p>
             </div>
-            <div>
-              <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-2">Based In</p>
-              <p className="font-display text-lg font-bold">Bandar Lampung</p>
-              <p className="font-display text-lg font-bold text-muted-foreground">Indonesia</p>
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="h-[1px] w-4 bg-primary" />
+                <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">Based In</p>
+              </div>
+              <p className="font-display text-xl md:text-2xl font-bold tracking-tight">Bandar Lampung</p>
+              <p className="font-display text-xl md:text-2xl font-bold tracking-tight text-muted-foreground">Indonesia</p>
             </div>
           </div>
         </motion.div>
       </motion.div>
 
+      <Marquee />
+
       <motion.div 
         style={{ opacity }}
-        className="absolute bottom-12 left-6 md:left-12 lg:left-24 flex items-center gap-4 text-xs font-mono uppercase tracking-widest text-muted-foreground"
+        className="absolute bottom-16 md:bottom-24 right-6 md:right-12 lg:right-24 flex flex-col items-center gap-4 text-[10px] font-mono uppercase tracking-widest text-muted-foreground"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.8, duration: 1 }}
+        transition={{ delay: 2, duration: 1 }}
       >
         <span className="writing-vertical rotate-180">Scroll to explore</span>
         <ArrowDownRight className="w-4 h-4 animate-bounce" />

@@ -30,17 +30,18 @@ function Counter({ end, label }: { end: number, label: string }) {
   useEffect(() => {
     let startTime: number;
     let animationFrame: number;
-    const duration = 2000;
+    const duration = 2500;
 
     const animate = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
       const progress = timestamp - startTime;
       
-      // Easing function (easeOutExpo)
-      const easeProgress = progress === duration ? 1 : 1 - Math.pow(2, -10 * progress / duration);
+      // easeOutBack with slight overshoot
+      const easeProgress = progress === duration ? 1 : 1 + 2.70158 * Math.pow(progress/duration - 1, 3) + 1.70158 * Math.pow(progress/duration - 1, 2);
+      const clampedProgress = Math.max(0, Math.min(1, easeProgress));
       
       if (progress < duration) {
-        setCount(Math.floor(end * easeProgress));
+        setCount(Math.floor(end * clampedProgress));
         animationFrame = requestAnimationFrame(animate);
       } else {
         setCount(end);
@@ -52,11 +53,11 @@ function Counter({ end, label }: { end: number, label: string }) {
   }, [end]);
 
   return (
-    <div className="flex flex-col gap-2">
-      <span className="font-display text-5xl md:text-7xl font-bold tracking-tighter text-background">
+    <div className="flex flex-col gap-2 relative group">
+      <span className="font-display text-6xl md:text-8xl font-bold tracking-tighter text-background group-hover:text-primary transition-colors duration-500">
         {count}+
       </span>
-      <span className="font-mono text-xs uppercase tracking-widest text-background/60">
+      <span className="font-mono text-xs md:text-sm uppercase tracking-widest text-background/60 border-t border-background/20 pt-4">
         {label}
       </span>
     </div>
@@ -65,59 +66,78 @@ function Counter({ end, label }: { end: number, label: string }) {
 
 export default function Expertise() {
   return (
-    <section id="expertise" className="py-24 md:py-32 bg-foreground text-background relative overflow-hidden">
-      {/* Decorative background element */}
-      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/5 rounded-full blur-3xl pointer-events-none transform translate-x-1/3 -translate-y-1/3" />
+    <section id="expertise" className="relative bg-foreground text-background overflow-hidden">
       
-      <div className="px-6 md:px-12 lg:px-24">
+      {/* Section Divider */}
+      <div className="py-6 border-y border-background/10 overflow-hidden flex whitespace-nowrap bg-background/5 absolute top-0 w-full">
+        <motion.div 
+          className="flex gap-8 text-xs md:text-sm font-mono uppercase tracking-widest text-background/50"
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ duration: 25, ease: "linear", repeat: Infinity }}
+        >
+          {[...Array(8)].map((_, i) => (
+            <span key={i} className="flex items-center gap-8">
+              <span>§ 03 / TECHNICAL CAPABILITIES</span>
+              <span className="w-1 h-1 rounded-full bg-background/20" />
+            </span>
+          ))}
+        </motion.div>
+      </div>
+
+      {/* Decorative background element */}
+      <div className="absolute top-1/4 right-0 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px] pointer-events-none transform translate-x-1/3" />
+      
+      <div className="px-6 md:px-12 lg:px-24 pt-32 pb-24 md:pt-48 md:pb-32 relative z-10">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
-            className="mb-16 md:mb-24"
+            className="mb-20 md:mb-32"
           >
-            <div className="flex items-center gap-4 mb-4">
-              <h2 className="text-sm font-mono uppercase tracking-widest text-primary">
-                03 // Stack
-              </h2>
-              <div className="h-[1px] w-12 bg-background/20" />
-            </div>
-            <h3 className="font-display text-5xl md:text-7xl font-bold uppercase tracking-tighter text-background max-w-2xl">
+            <h3 className="font-display text-[10vw] md:text-[8vw] leading-[0.85] font-bold uppercase tracking-tighter text-background max-w-4xl">
               Technical <br /> <span className="italic font-serif lowercase text-primary tracking-normal">Capabilities</span>.
             </h3>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+          <div className="grid md:grid-cols-2 gap-16 lg:gap-24">
             {skills.map((skillGroup, index) => (
               <motion.div
                 key={skillGroup.category}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="space-y-6"
+                transition={{ duration: 0.8, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                className="space-y-8"
               >
-                <div className="border-b border-background/20 pb-4">
-                  <h4 className="text-xl font-display font-bold uppercase tracking-tight text-background mb-2">
+                <div className="border-b border-background/20 pb-4 flex justify-between items-end">
+                  <h4 className="text-3xl md:text-4xl font-display font-bold uppercase tracking-tight text-background">
                     {skillGroup.category}
                   </h4>
-                  <p className="text-sm font-sans font-light text-background/60">
-                    {skillGroup.description}
-                  </p>
+                  <span className="font-mono text-sm text-primary">0{index + 1}</span>
                 </div>
                 
-                <ul className="flex flex-wrap gap-2">
-                  {skillGroup.items.map((item) => (
-                    <li 
+                <p className="text-lg font-sans font-light text-background/60">
+                  {skillGroup.description}
+                </p>
+                
+                <div className="flex flex-wrap gap-3">
+                  {skillGroup.items.map((item, i) => (
+                    <motion.div 
                       key={item} 
-                      className="px-3 py-1.5 border border-background/20 rounded-sm font-mono text-[11px] uppercase tracking-wider text-background/80 hover:bg-background hover:text-foreground hover:border-background transition-colors cursor-default"
+                      whileHover={{ scale: 1.05, y: -5 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                      className="px-4 py-2.5 border border-background/20 rounded-full font-mono text-xs uppercase tracking-widest text-background/80 hover:bg-background hover:text-foreground hover:border-background transition-colors cursor-default relative group"
                     >
                       {item}
-                    </li>
+                      <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-3 py-1 text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+                        Experienced
+                        <div className="absolute bottom-[-4px] left-1/2 -translate-x-1/2 w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[4px] border-t-primary" />
+                      </div>
+                    </motion.div>
                   ))}
-                </ul>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -125,18 +145,19 @@ export default function Expertise() {
       </div>
       
       {/* Proof / Stats Strip */}
-      <div className="mt-24 md:mt-32 border-y border-background/10 bg-background/5">
+      <div className="border-t border-background/10 bg-background/5 relative z-10">
         <motion.div 
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 py-12"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 1 }}
+          className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 py-20"
         >
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
-            <Counter end={10} label="Proyek Diselesaikan" />
-            <Counter end={5} label="Organisasi & Panitia" />
-            <Counter end={90} label="% Unit Test Cov." />
-            <Counter end={3} label="Tahun Pengalaman" />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-12 md:gap-8">
+            <Counter end={10} label="Proyek Selesai" />
+            <Counter end={5} label="Organisasi" />
+            <Counter end={90} label="% Test Coverage" />
+            <Counter end={3} label="Tahun Exp." />
           </div>
         </motion.div>
       </div>
