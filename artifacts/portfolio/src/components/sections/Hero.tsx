@@ -93,7 +93,7 @@ export default function Hero() {
           </div>
         </motion.div>
         
-        <h1 className="text-[14vw] md:text-[11vw] lg:text-[10vw] leading-[0.8] font-display font-bold uppercase tracking-tighter flex flex-col gap-1 md:gap-3">
+        <h1 className="text-[clamp(3rem,14vw,12rem)] md:text-[11vw] lg:text-[10vw] leading-[0.8] font-display font-bold uppercase tracking-tighter flex flex-col gap-1 md:gap-3">
           <KineticText text="End-to-End" delay={0.5} yOffset="120%" />
           <div className="flex items-center gap-4 md:gap-8">
             <KineticText text="Web" delay={0.7} yOffset="120%" />
@@ -118,21 +118,21 @@ export default function Hero() {
         </h1>
 
         <motion.div 
-          className="mt-16 md:mt-24 grid lg:grid-cols-12 gap-12 lg:gap-8 items-start"
+          className="mt-12 md:mt-24 grid lg:grid-cols-12 gap-12 lg:gap-8 items-start"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, delay: 1.5, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className="lg:col-span-7 max-w-xl">
-            <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed font-sans font-light">
+            <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground leading-relaxed font-sans font-light">
               Saya Edu Juanda Pratama, Full Stack Developer dari Bandar Lampung. 
               Membangun solusi digital yang scalable, aman, dan berfokus pada <span className="text-foreground font-medium underline decoration-primary/50 underline-offset-4">performa</span> & <span className="text-foreground font-medium underline decoration-primary/50 underline-offset-4">user experience</span>.
             </p>
             
-            <div className="flex flex-wrap gap-4 mt-10">
+            <div className="flex flex-col sm:flex-row gap-4 mt-8 md:mt-10">
               <button 
                 onClick={() => scrollTo("work")}
-                className="group relative overflow-hidden flex items-center justify-center gap-3 px-8 py-4 bg-foreground text-background font-mono text-xs uppercase tracking-widest rounded-full"
+                className="group relative overflow-hidden flex items-center justify-center gap-3 px-8 py-4 min-h-[44px] bg-foreground text-background font-mono text-xs uppercase tracking-widest rounded-full w-full sm:w-auto"
               >
                 <div className="absolute inset-0 bg-primary translate-y-[100%] rounded-full group-hover:translate-y-0 transition-transform duration-500 ease-[0.76,0,0.24,1]" />
                 <span className="relative z-10 flex items-center gap-2">
@@ -143,7 +143,7 @@ export default function Hero() {
               
               <a 
                 href="#" 
-                className="group flex items-center justify-center gap-3 px-8 py-4 border border-border hover:border-foreground text-foreground font-mono text-xs uppercase tracking-widest rounded-full transition-colors duration-500"
+                className="group flex items-center justify-center gap-3 px-8 py-4 min-h-[44px] border border-border hover:border-foreground text-foreground font-mono text-xs uppercase tracking-widest rounded-full transition-colors duration-500 w-full sm:w-auto"
               >
                 <span>Unduh CV</span>
                 <Download className="w-4 h-4 group-hover:-translate-y-1 transition-transform" />

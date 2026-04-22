@@ -1,5 +1,5 @@
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { useRef } from "react";
+import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
 import { ArrowUpRight } from "lucide-react";
 
 const projects = [
@@ -55,85 +55,29 @@ const projects = [
   }
 ];
 
-function ProjectItem({ project, index }: { project: typeof projects[0]; index: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"]
-  });
-
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 0.9]);
-  const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
-  const smoothY = useSpring(y, { stiffness: 100, damping: 30, restDelta: 0.001 });
-
-  return (
-    <div ref={ref} className="h-screen flex items-center sticky top-0">
-      <div className="w-full grid lg:grid-cols-12 gap-12 lg:gap-24 items-center">
-        {/* Text Content */}
-        <div className="lg:col-span-5 space-y-8 order-2 lg:order-1">
-          <div className="flex items-center gap-4 font-mono text-[10px] md:text-xs uppercase tracking-widest text-muted-foreground">
-            <span>0{project.id}</span>
-            <span className="w-12 h-[1px] bg-border"></span>
-            <span className="text-primary">{project.role}</span>
-          </div>
-          
-          <div className="space-y-4">
-            <p className="font-serif italic text-xl text-muted-foreground">{project.client}</p>
-            <h3 className="font-display text-5xl lg:text-7xl font-bold uppercase tracking-tighter leading-[0.9]">
-              {project.title}
-            </h3>
-          </div>
-          
-          <p className="text-lg text-muted-foreground leading-relaxed font-sans font-light max-w-md">
-            {project.description}
-          </p>
-
-          <div className="flex flex-wrap gap-2 pt-4">
-            {project.tech.map(t => (
-              <span key={t} className="px-3 py-1 border border-border/50 text-foreground font-mono text-[10px] uppercase tracking-wider rounded-full">
-                {t}
-              </span>
-            ))}
-          </div>
-
-          <div className="pt-8">
-            <a href={project.link} className="inline-flex items-center gap-4 group/link">
-              <span className="w-12 h-12 rounded-full border border-border flex items-center justify-center group-hover/link:bg-foreground group-hover/link:text-background group-hover/link:border-foreground transition-all duration-300">
-                <ArrowUpRight className="w-5 h-5 group-hover/link:rotate-45 transition-transform duration-300" />
-              </span>
-              <span className="font-mono text-sm uppercase tracking-widest font-semibold group-hover/link:translate-x-2 transition-transform duration-300">View Case</span>
-            </a>
-          </div>
-        </div>
-
-        {/* Image Content */}
-        <motion.div 
-          style={{ scale }}
-          className="lg:col-span-7 relative group order-1 lg:order-2"
-          data-cursor="view"
-        >
-          <div className="overflow-hidden bg-muted aspect-[4/3] lg:aspect-[3/4] rounded-sm relative">
-            <motion.div style={{ y: smoothY }} className="absolute inset-[-15%] w-[130%] h-[130%]">
-              <img 
-                src={project.image} 
-                alt={project.title}
-                loading="lazy"
-                className="w-full h-full object-cover transition-all duration-1000 ease-[0.16,1,0.3,1] grayscale-[0.3] group-hover:grayscale-0 group-hover:scale-[1.05]"
-              />
-            </motion.div>
-            <div className="absolute inset-0 bg-background/10 mix-blend-overlay pointer-events-none transition-opacity duration-500 group-hover:opacity-0" />
-          </div>
-        </motion.div>
-      </div>
-    </div>
-  );
-}
-
 export default function Work() {
   const containerRef = useRef<HTMLDivElement>(null);
-  
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
+
+  useEffect(() => {
+    return scrollYProgress.onChange((latest) => {
+      const index = Math.min(
+        Math.floor(latest * projects.length),
+        projects.length - 1
+      );
+      setActiveIndex(index);
+    });
+  }, [scrollYProgress]);
+
+  const activeProject = projects[activeIndex];
+
   return (
-    <section id="work" ref={containerRef} className="relative bg-background">
+    <section id="work" className="relative bg-background">
       {/* Section Divider */}
       <div className="py-6 border-y border-border/50 overflow-hidden flex whitespace-nowrap bg-muted/20">
         <motion.div 
@@ -160,25 +104,158 @@ export default function Work() {
             className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12"
           >
             <div>
-              <h3 className="font-display text-6xl md:text-8xl font-bold uppercase tracking-tighter">
+              <h3 className="font-display text-5xl md:text-6xl lg:text-8xl font-bold uppercase tracking-tighter">
                 Archive.
               </h3>
             </div>
-            <p className="text-lg text-muted-foreground max-w-sm font-sans font-light pb-2">
+            <p className="text-base md:text-lg text-muted-foreground max-w-sm font-sans font-light pb-2">
               Kumpulan studi kasus proyek terpilih. Dari platform e-voting skala kampus hingga portal berita komersial.
             </p>
           </motion.div>
         </div>
       </div>
 
-      {/* Sticky Pinned Projects Container */}
-      <div className="px-6 md:px-12 lg:px-24 pb-32">
-        <div className="max-w-7xl mx-auto relative">
-          {projects.map((project, index) => (
-            <ProjectItem key={project.id} project={project} index={index} />
-          ))}
+      {/* Mobile Stacked Layout (<1024px) */}
+      <div className="block lg:hidden px-6 md:px-12 pb-24 space-y-24">
+        {projects.map((project, i) => (
+          <div key={project.id} className="flex flex-col gap-8">
+            <div className="overflow-hidden bg-muted aspect-[4/3] md:aspect-video rounded-sm relative group">
+              <img 
+                src={project.image} 
+                alt={project.title}
+                loading={i === 0 ? "eager" : "lazy"}
+                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+              />
+            </div>
+            <div className="space-y-6">
+              <div className="flex items-center gap-4 font-mono text-[10px] md:text-xs uppercase tracking-widest text-muted-foreground">
+                <span>0{project.id}</span>
+                <span className="w-12 h-[1px] bg-border"></span>
+                <span className="text-primary">{project.role}</span>
+              </div>
+              <div>
+                <p className="font-serif italic text-lg text-muted-foreground">{project.client}</p>
+                <h3 className="font-display text-3xl md:text-5xl font-bold uppercase tracking-tighter leading-tight mt-2">
+                  {project.title}
+                </h3>
+              </div>
+              <p className="text-base md:text-lg text-muted-foreground leading-relaxed font-sans font-light">
+                {project.description}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {project.tech.map(t => (
+                  <span key={t} className="px-3 py-1 border border-border/50 text-foreground font-mono text-[10px] uppercase tracking-wider rounded-full">
+                    {t}
+                  </span>
+                ))}
+              </div>
+              <div className="pt-4">
+                <a href={project.link} className="inline-flex items-center gap-4 group/link">
+                  <span className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-border flex items-center justify-center group-hover/link:bg-foreground group-hover/link:text-background transition-colors duration-300">
+                    <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5 group-hover/link:rotate-45 transition-transform duration-300" />
+                  </span>
+                  <span className="font-mono text-xs md:text-sm uppercase tracking-widest font-semibold group-hover/link:translate-x-2 transition-transform duration-300">View Case</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop Sticky Layout (>=1024px) */}
+      <div 
+        ref={containerRef} 
+        className="hidden lg:block relative"
+        style={{ height: `${projects.length * 100}vh` }}
+      >
+        <div className="sticky top-0 h-screen flex items-center overflow-hidden">
+          <div className="w-full px-24">
+            <div className="max-w-7xl mx-auto w-full grid grid-cols-12 gap-16 lg:gap-24 items-center">
+              
+              {/* Text Side */}
+              <div className="col-span-5 relative h-[500px] flex items-center">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeProject.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                    className="absolute inset-0 flex flex-col justify-center space-y-8"
+                  >
+                    <div className="flex items-center gap-4 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+                      <span>0{activeProject.id}</span>
+                      <span className="w-12 h-[1px] bg-border"></span>
+                      <span className="text-primary">{activeProject.role}</span>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <p className="font-serif italic text-xl text-muted-foreground">{activeProject.client}</p>
+                      <h3 className="font-display text-5xl xl:text-6xl font-bold uppercase tracking-tighter leading-[0.9]">
+                        {activeProject.title}
+                      </h3>
+                    </div>
+                    
+                    <p className="text-lg text-muted-foreground leading-relaxed font-sans font-light max-w-md">
+                      {activeProject.description}
+                    </p>
+
+                    <div className="flex flex-wrap gap-2 pt-2">
+                      {activeProject.tech.map(t => (
+                        <span key={t} className="px-3 py-1 border border-border/50 text-foreground font-mono text-[10px] uppercase tracking-wider rounded-full">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="pt-6">
+                      <a href={activeProject.link} className="inline-flex items-center gap-4 group/link">
+                        <span className="w-12 h-12 rounded-full border border-border flex items-center justify-center group-hover/link:bg-foreground group-hover/link:text-background group-hover/link:border-foreground transition-all duration-300">
+                          <ArrowUpRight className="w-5 h-5 group-hover/link:rotate-45 transition-transform duration-300" />
+                        </span>
+                        <span className="font-mono text-sm uppercase tracking-widest font-semibold group-hover/link:translate-x-2 transition-transform duration-300">View Case</span>
+                      </a>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+                
+                {/* Progress indicator */}
+                <div className="absolute bottom-0 left-0 flex gap-1 font-mono text-[10px] text-muted-foreground">
+                  <span className="text-foreground">0{activeIndex + 1}</span>
+                  <span className="opacity-50">/</span>
+                  <span className="opacity-50">0{projects.length}</span>
+                </div>
+              </div>
+
+              {/* Image Side */}
+              <div className="col-span-7 relative h-[600px] flex items-center justify-end">
+                <div className="w-full aspect-[4/3] relative rounded-sm overflow-hidden bg-muted" data-cursor="view">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={activeProject.id}
+                      initial={{ opacity: 0, scale: 1.05 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                      className="absolute inset-0 w-full h-full group"
+                    >
+                      <img 
+                        src={activeProject.image} 
+                        alt={activeProject.title}
+                        loading={activeProject.id === 1 ? "eager" : "lazy"}
+                        className="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 transition-all duration-700"
+                      />
+                      <div className="absolute inset-0 bg-background/5 mix-blend-overlay pointer-events-none transition-opacity duration-500 group-hover:opacity-0" />
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+              </div>
+
+            </div>
+          </div>
         </div>
       </div>
+
     </section>
   );
 }

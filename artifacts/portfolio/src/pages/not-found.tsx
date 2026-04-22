@@ -47,7 +47,7 @@ export default function NotFound() {
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className="relative mb-12">
-            <h1 className="text-[30vw] md:text-[25vw] leading-none font-display font-bold uppercase tracking-tighter text-foreground mix-blend-overlay select-none flex">
+            <h1 className="text-[clamp(6rem,30vw,20rem)] md:text-[25vw] leading-none font-display font-bold uppercase tracking-tighter text-foreground mix-blend-overlay select-none flex">
               <KineticText text="404" />
             </h1>
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">

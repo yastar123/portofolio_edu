@@ -77,18 +77,18 @@ export default function Navbar() {
         }`}
       >
         <div className="px-6 md:px-12 lg:px-24 flex items-center justify-between">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
             <Link href="/" className="font-display font-bold text-xl uppercase tracking-tighter hover:text-primary transition-colors group flex items-center gap-2">
               EJP<span className="text-primary group-hover:opacity-0 transition-opacity">.</span>
             </Link>
-            <div className="hidden md:flex items-center gap-2 px-2 py-1 bg-muted rounded-full text-[10px] font-mono uppercase tracking-widest text-muted-foreground border border-border/50">
+            <div className="hidden sm:flex items-center gap-2 px-2 py-1 bg-muted rounded-full text-[10px] font-mono uppercase tracking-widest text-muted-foreground border border-border/50">
               <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
               <span>ID</span>
             </div>
           </div>
 
-          <div className="flex items-center gap-6">
-            <nav className="hidden md:flex items-center bg-muted/50 backdrop-blur-md rounded-full p-1 border border-border/50 relative">
+          <div className="flex items-center gap-2 md:gap-6">
+            <nav className="hidden lg:flex items-center bg-muted/50 backdrop-blur-md rounded-full p-1 border border-border/50 relative">
               {navItems.map((item) => (
                 <button
                   key={item.name}
@@ -120,7 +120,7 @@ export default function Navbar() {
               ))}
             </nav>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 md:gap-3">
               <motion.button
                 whileTap={{ scale: 0.9 }}
                 onClick={handleThemeToggle}
@@ -157,7 +157,7 @@ export default function Navbar() {
               </button>
 
               <button 
-                className="md:hidden w-10 h-10 rounded-full flex items-center justify-center border border-border/50 bg-background/50 hover:bg-accent transition-colors"
+                className="lg:hidden w-10 h-10 rounded-full flex items-center justify-center border border-border/50 bg-background/50 hover:bg-accent transition-colors"
                 onClick={() => setMobileMenuOpen(true)}
               >
                 <Menu className="w-4 h-4" />
@@ -189,7 +189,7 @@ export default function Navbar() {
               </button>
             </div>
 
-            <nav className="flex flex-col gap-6 text-4xl font-display uppercase tracking-tighter">
+            <nav className="flex flex-col gap-6 text-3xl md:text-4xl font-display uppercase tracking-tighter overflow-y-auto max-h-[60vh] pb-4">
               {navItems.map((item, i) => (
                 <motion.div
                   key={item.name}

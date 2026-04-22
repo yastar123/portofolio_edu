@@ -212,7 +212,7 @@ export default function Experience() {
             </div>
           </div>
 
-          <div className="relative pt-12">
+          <div className="relative pt-8 md:pt-12">
             {/* Scroll-linked vertical rail */}
             <div className="absolute left-[7px] md:left-[15px] top-0 bottom-0 w-[1px] bg-border overflow-hidden">
               <motion.div 
@@ -230,7 +230,7 @@ export default function Experience() {
                   viewport={{ once: true, margin: "-100px" }}
                   transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                   key={`${item.role}-${item.company}-${index}`}
-                  className="relative pl-10 md:pl-16 group"
+                  className="relative pl-8 md:pl-16 group"
                 >
                   {/* Animated timeline node */}
                   <div className="absolute left-0 md:left-2 top-2 w-4 h-4 bg-background border border-primary rounded-full group-hover:scale-150 group-hover:bg-primary transition-all duration-500 z-10 ease-[0.76,0,0.24,1]" />

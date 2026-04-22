@@ -14,7 +14,7 @@ export default function Footer() {
               whileInView={{ y: 0, opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="text-[20vw] md:text-[12vw] leading-none font-display font-bold uppercase tracking-tighter"
+              className="text-[clamp(4rem,20vw,12rem)] md:text-[12vw] leading-none font-display font-bold uppercase tracking-tighter"
             >
               EJP<span className="text-primary">.</span>
             </motion.h2>

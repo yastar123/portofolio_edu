@@ -92,7 +92,7 @@ export default function Contact() {
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
             className="text-center mb-16 md:mb-24"
           >
-            <h3 className="font-display text-[12vw] md:text-[8vw] leading-[0.85] font-bold uppercase tracking-tighter mb-6">
+            <h3 className="font-display text-[clamp(2.5rem,12vw,8rem)] md:text-[8vw] leading-[0.85] font-bold uppercase tracking-tighter mb-6">
               Let's Build <br /> <span className="text-primary italic font-serif lowercase tracking-normal">Something</span>.
             </h3>
             <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto font-sans font-light">

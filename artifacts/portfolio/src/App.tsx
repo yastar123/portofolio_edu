@@ -108,14 +108,14 @@ function CornerAnnotations() {
 
   return (
     <>
-      <div className="fixed top-4 left-4 md:top-8 md:left-8 font-mono text-[10px] uppercase tracking-widest text-muted-foreground/50 z-40 mix-blend-difference">
+      <div className="hidden md:block fixed top-4 left-4 md:top-8 md:left-8 font-mono text-[10px] uppercase tracking-widest text-muted-foreground/50 z-40 mix-blend-difference">
         EJP / 2026
       </div>
-      <div className="fixed top-4 right-4 md:top-8 md:right-8 font-mono text-[10px] uppercase tracking-widest text-muted-foreground/50 z-40 mix-blend-difference">
+      <div className="hidden md:block fixed top-4 right-4 md:top-8 md:right-8 font-mono text-[10px] uppercase tracking-widest text-muted-foreground/50 z-40 mix-blend-difference">
         BDL — GMT+7
       </div>
       <div className="fixed bottom-4 right-4 md:bottom-8 md:right-8 font-mono text-[10px] uppercase tracking-widest text-muted-foreground/50 z-40 mix-blend-difference flex items-center gap-2">
-        <div className="w-12 h-[1px] bg-muted-foreground/20">
+        <div className="hidden md:block w-12 h-[1px] bg-muted-foreground/20">
           <motion.div className="h-full bg-primary" style={{ scaleX, originX: 0 }} />
         </div>
         <span>{progress}%</span>
