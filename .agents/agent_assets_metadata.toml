@@ -1,0 +1,32 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "k3fdywsWyTpJl3v05ujxs"
+uri = "file://artifacts/portfolio/public/images/portrait.png"
+type = "image"
+title = "Black and white editorial portrait"
+
+[[generated]]
+id = "Q3YUmgG1yxQtU5I-WuitM"
+uri = "file://artifacts/portfolio/public/images/project-1.png"
+type = "image"
+title = "Abstract 3D glass shape"
+
+[[generated]]
+id = "kcuughx_lvQB9oU1pC-fj"
+uri = "file://artifacts/portfolio/public/images/project-2.png"
+type = "image"
+title = "Minimalist UI mockup"
+
+[[generated]]
+id = "4DJPlLRYL100n8dydGY5w"
+uri = "file://artifacts/portfolio/public/images/project-3.png"
+type = "image"
+title = "Brutalist typography poster"
+
+[[generated]]
+id = "ytevYYPO-dGdijYI1JV7m"
+uri = "file://artifacts/portfolio/public/images/project-4.png"
+type = "image"
+title = "Dark mode data dashboard"
