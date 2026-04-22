@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-import { ArrowUpRight, ArrowRight } from "lucide-react";
+import { ArrowUpRight, ArrowRight, ArrowDown } from "lucide-react";
+import { SectionHeader } from "@/components/ui/SectionHeader";
 
 const projects = [
   {
@@ -64,6 +65,12 @@ export default function Work() {
     offset: ["start start", "end end"]
   });
 
+  const progressSpring = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
   useEffect(() => {
     return scrollYProgress.onChange((latest) => {
       const index = Math.min(
@@ -78,21 +85,7 @@ export default function Work() {
 
   return (
     <section id="work" className="relative bg-background">
-      {/* Section Divider */}
-      <div className="py-6 border-y border-border/50 overflow-hidden flex whitespace-nowrap bg-muted/20">
-        <motion.div 
-          className="flex gap-8 text-xs md:text-sm font-mono uppercase tracking-widest text-muted-foreground"
-          animate={{ x: ["-50%", "0%"] }}
-          transition={{ duration: 25, ease: "linear", repeat: Infinity }}
-        >
-          {[...Array(8)].map((_, i) => (
-            <span key={i} className="flex items-center gap-8">
-              <span>§ 02 / SELECTED WORKS</span>
-              <span className="w-1 h-1 rounded-full bg-border" />
-            </span>
-          ))}
-        </motion.div>
-      </div>
+      <SectionHeader number="02" eyebrow="SELECTED WORKS" title="WORK" />
 
       <div className="px-6 md:px-12 lg:px-24 pt-24 md:pt-32 pb-12">
         <div className="max-w-7xl mx-auto">
@@ -129,7 +122,7 @@ export default function Work() {
             </div>
             <div className="space-y-6">
               <div className="flex items-center gap-4 font-mono text-[10px] md:text-xs uppercase tracking-widest text-muted-foreground">
-                <span>0{project.id}</span>
+                <span className="text-primary font-bold text-lg">0{project.id}</span>
                 <span className="w-12 h-[1px] bg-border"></span>
                 <span className="text-primary">{project.role}</span>
               </div>
@@ -167,6 +160,15 @@ export default function Work() {
         style={{ height: `${projects.length * 100}vh` }}
       >
         <div className="sticky top-0 h-screen flex items-center overflow-hidden">
+          
+          {/* Progress Rail */}
+          <div className="absolute right-12 top-1/2 -translate-y-1/2 w-[2px] h-[400px] bg-border/50 z-20 hidden xl:block rounded-full overflow-hidden">
+            <motion.div 
+              className="absolute top-0 left-0 w-full bg-primary origin-top"
+              style={{ scaleY: progressSpring, height: "100%" }}
+            />
+          </div>
+
           <div className="w-full px-24">
             <div className="max-w-7xl mx-auto w-full grid grid-cols-12 gap-16 lg:gap-24 items-center">
               
@@ -181,13 +183,25 @@ export default function Work() {
                     transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                     className="absolute inset-0 flex flex-col justify-center space-y-8"
                   >
-                    <div className="flex items-center gap-4 font-mono text-xs uppercase tracking-widest text-muted-foreground">
-                      <span>0{activeProject.id}</span>
-                      <span className="w-12 h-[1px] bg-border"></span>
+                    <div className="flex items-center gap-4 font-mono text-xs uppercase tracking-widest text-muted-foreground relative">
+                      <motion.div 
+                        initial={{ scaleX: 0 }}
+                        animate={{ scaleX: 1 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                        className="absolute -bottom-2 left-0 h-[2px] bg-primary w-8 origin-left"
+                      />
+                      <span className="text-3xl font-display font-bold text-foreground leading-none">0{activeProject.id}</span>
+                      <span className="w-12 h-[1px] bg-border ml-2"></span>
                       <span className="text-primary">{activeProject.role}</span>
                     </div>
                     
-                    <div className="space-y-4">
+                    <div className="space-y-4 relative overflow-hidden">
+                      <motion.div 
+                        initial={{ x: "-100%" }}
+                        animate={{ x: "100%" }}
+                        transition={{ duration: 0.5, ease: "easeInOut" }}
+                        className="absolute inset-0 bg-primary/20 z-10"
+                      />
                       <p className="font-serif italic text-xl text-muted-foreground">{activeProject.client}</p>
                       <h3 className="font-display text-5xl xl:text-6xl font-bold uppercase tracking-tighter leading-[0.9]">
                         {activeProject.title}
@@ -222,10 +236,19 @@ export default function Work() {
                 </AnimatePresence>
                 
                 {/* Progress indicator */}
-                <div className="absolute bottom-0 left-0 flex gap-1 font-mono text-[10px] text-muted-foreground">
-                  <span className="text-foreground">0{activeIndex + 1}</span>
-                  <span className="opacity-50">/</span>
-                  <span className="opacity-50">0{projects.length}</span>
+                <div className="absolute bottom-0 left-0 flex gap-4 items-center">
+                  <div className="flex gap-1 font-mono text-[10px] text-muted-foreground items-center">
+                    <span className="text-foreground font-bold text-sm">0{activeIndex + 1}</span>
+                    <span className="opacity-50 mx-1">/</span>
+                    <span className="opacity-50">0{projects.length}</span>
+                  </div>
+                  {activeIndex < projects.length - 1 && (
+                    <div className="flex items-center gap-2 text-[10px] font-mono text-muted-foreground/60 uppercase tracking-widest">
+                      <span className="w-8 h-[1px] bg-border"></span>
+                      <span>Scroll</span>
+                      <ArrowDown className="w-3 h-3 animate-bounce" />
+                    </div>
+                  )}
                 </div>
               </div>
 

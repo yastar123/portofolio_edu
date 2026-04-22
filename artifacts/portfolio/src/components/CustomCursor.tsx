@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowUpRight, Plus } from "lucide-react";
 
 export default function CustomCursor() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [cursorState, setCursorState] = useState<'default' | 'hover' | 'view' | 'text'>('default');
+  const [cursorState, setCursorState] = useState<'default' | 'hover' | 'link' | 'view' | 'text'>('default');
 
   useEffect(() => {
     const updateMousePosition = (e: MouseEvent) => {
@@ -27,10 +28,14 @@ export default function CustomCursor() {
         return;
       }
 
+      const isLink = target.tagName.toLowerCase() === 'a' || target.closest('a') !== null;
+      if (isLink) {
+        setCursorState('link');
+        return;
+      }
+
       const isClickable = 
-        target.tagName.toLowerCase() === 'a' || 
         target.tagName.toLowerCase() === 'button' ||
-        target.closest('a') !== null ||
         target.closest('button') !== null ||
         window.getComputedStyle(target).cursor === 'pointer';
       
@@ -57,16 +62,18 @@ export default function CustomCursor() {
 
   const variants = {
     default: { x: mousePosition.x - 8, y: mousePosition.y - 8, scale: 1, backgroundColor: "hsl(var(--primary))", mixBlendMode: "normal" as any },
-    hover: { x: mousePosition.x - 8, y: mousePosition.y - 8, scale: 0, backgroundColor: "hsl(var(--primary))", mixBlendMode: "normal" as any },
+    hover: { x: mousePosition.x - 8, y: mousePosition.y - 8, scale: 0.5, backgroundColor: "hsl(var(--primary))", mixBlendMode: "normal" as any },
+    link: { x: mousePosition.x - 16, y: mousePosition.y - 16, scale: 2, backgroundColor: "hsl(var(--foreground))", mixBlendMode: "normal" as any },
     view: { x: mousePosition.x - 32, y: mousePosition.y - 32, scale: 4, backgroundColor: "hsl(var(--background))", mixBlendMode: "normal" as any },
     text: { x: mousePosition.x - 8, y: mousePosition.y - 8, scale: 3, backgroundColor: "#fff", mixBlendMode: "difference" as any }
   };
 
   const ringVariants = {
-    default: { x: mousePosition.x - 20, y: mousePosition.y - 20, scale: 1, opacity: 0.5 },
+    default: { x: mousePosition.x - 20, y: mousePosition.y - 20, scale: 1, opacity: 0.5, borderColor: "hsl(var(--border))" },
     hover: { x: mousePosition.x - 20, y: mousePosition.y - 20, scale: 1.5, opacity: 1, borderColor: "hsl(var(--primary))" },
-    view: { x: mousePosition.x - 20, y: mousePosition.y - 20, scale: 0, opacity: 0 },
-    text: { x: mousePosition.x - 20, y: mousePosition.y - 20, scale: 0, opacity: 0 }
+    link: { x: mousePosition.x - 20, y: mousePosition.y - 20, scale: 0, opacity: 0, borderColor: "transparent" },
+    view: { x: mousePosition.x - 20, y: mousePosition.y - 20, scale: 0, opacity: 0, borderColor: "transparent" },
+    text: { x: mousePosition.x - 20, y: mousePosition.y - 20, scale: 0, opacity: 0, borderColor: "transparent" }
   };
 
   return (
@@ -82,16 +89,34 @@ export default function CustomCursor() {
           mass: 0.5
         }}
       >
-        <motion.span 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: cursorState === 'view' ? 1 : 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          View
-        </motion.span>
+        <AnimatePresence mode="wait">
+          {cursorState === 'view' && (
+            <motion.span 
+              key="view"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              View
+            </motion.span>
+          )}
+          {cursorState === 'link' && (
+            <motion.div
+              key="link"
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0 }}
+              transition={{ duration: 0.2 }}
+              className="text-background"
+            >
+              <ArrowUpRight className="w-2.5 h-2.5" strokeWidth={3} />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
       <motion.div
-        className="fixed top-0 left-0 w-10 h-10 border border-primary/50 rounded-full pointer-events-none z-[99]"
+        className="fixed top-0 left-0 w-10 h-10 border rounded-full pointer-events-none z-[99] flex items-center justify-center text-primary"
         variants={ringVariants}
         animate={cursorState}
         transition={{
@@ -100,7 +125,19 @@ export default function CustomCursor() {
           damping: 20,
           mass: 0.5
         }}
-      />
+      >
+        <AnimatePresence>
+          {cursorState === 'hover' && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0 }}
+            >
+              <Plus className="w-4 h-4" />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
     </>
   );
 }

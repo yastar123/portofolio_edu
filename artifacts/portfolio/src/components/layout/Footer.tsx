@@ -1,10 +1,40 @@
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { ArrowUp, MapPin } from "lucide-react";
-import { SiGithub, SiLinkedin, SiWhatsapp } from "react-icons/si";
+import { useEffect, useState, useRef } from "react";
+import { SiGithub, SiWhatsapp } from "react-icons/si";
+import { Linkedin as SiLinkedin } from "lucide-react";
+
+function Clock() {
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatterLocal = new Intl.DateTimeFormat('id-ID', {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+
+  const formatterBdl = new Intl.DateTimeFormat('id-ID', {
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZone: 'Asia/Jakarta'
+  });
+
+  return (
+    <span>Anda: {formatterLocal.format(time)} / Saya: {formatterBdl.format(time)} GMT+7</span>
+  );
+}
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const lastUpdated = new Intl.DateTimeFormat('id-ID', { dateStyle: 'long' }).format(new Date());
   
+  const ejpRef = useRef(null);
+  const isEjpInView = useInView(ejpRef, { once: false, margin: "100px" });
+
   return (
     <footer className="bg-foreground text-background pt-24 pb-6 px-6 md:px-12 lg:px-24 relative overflow-hidden">
       <div className="max-w-7xl mx-auto relative z-10">
@@ -53,27 +83,40 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mb-16 w-full overflow-hidden flex justify-center">
-          <h2 className="text-[clamp(4rem,22vw,18rem)] leading-[0.8] font-display font-bold uppercase tracking-tighter text-background whitespace-nowrap">
+        <div className="mb-16 w-full overflow-hidden flex justify-center relative" ref={ejpRef}>
+          <motion.h2 
+            animate={isEjpInView ? { 
+              y: [0, -10, 0],
+              x: [0, 5, 0],
+              rotate: [0, 1, 0, -1, 0]
+            } : {}}
+            transition={{ duration: 20, ease: "linear", repeat: Infinity }}
+            className="text-[clamp(4rem,22vw,18rem)] leading-[0.8] font-display font-bold uppercase tracking-tighter text-background whitespace-nowrap transform-gpu"
+          >
             EJP<span className="text-primary">.</span>
-          </h2>
+          </motion.h2>
         </div>
         
         <div className="flex flex-col md:flex-row justify-between items-center gap-6 pt-6 border-t border-background/20">
-          <div className="font-mono text-[10px] md:text-xs uppercase tracking-widest text-background/60 flex flex-col md:flex-row items-center gap-2 md:gap-4">
+          <div className="font-mono text-[10px] md:text-xs uppercase tracking-widest text-background/60 flex flex-col md:flex-row items-center gap-2 md:gap-4 text-center md:text-left">
             <span>&copy; {currentYear} Edu Juanda Pratama</span>
             <span className="hidden md:inline text-background/20">|</span>
             <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> Crafted in Bandar Lampung</span>
+            <span className="hidden md:inline text-background/20">|</span>
+            <span>Update Terakhir: {lastUpdated}</span>
           </div>
           
-          <button 
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="flex items-center gap-2 font-mono text-[10px] md:text-xs uppercase tracking-widest text-background hover:text-primary transition-colors group"
-            aria-label="Back to Top"
-          >
-            Back to top
-            <ArrowUp className="w-3 h-3 group-hover:-translate-y-1 transition-transform" />
-          </button>
+          <div className="font-mono text-[10px] md:text-xs uppercase tracking-widest text-background/60 flex items-center gap-4">
+            <Clock />
+            <button 
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="flex items-center gap-2 text-background hover:text-primary transition-colors group"
+              aria-label="Back to Top"
+            >
+              Back to top
+              <ArrowUp className="w-3 h-3 group-hover:-translate-y-1 transition-transform" />
+            </button>
+          </div>
         </div>
       </div>
     </footer>

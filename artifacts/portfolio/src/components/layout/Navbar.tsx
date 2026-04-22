@@ -3,7 +3,8 @@ import { Link } from "wouter";
 import { useTheme } from "@/components/theme-provider";
 import { Moon, Sun, ArrowUpRight, Menu, X, Mail } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
-import { SiGithub, SiLinkedin, SiWhatsapp } from "react-icons/si";
+import { SiGithub, SiWhatsapp } from "react-icons/si";
+import { Linkedin as SiLinkedin } from "lucide-react";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -50,9 +51,44 @@ export default function Navbar() {
     }
   };
 
-  const handleThemeToggle = () => {
+  const handleThemeToggle = (e: React.MouseEvent) => {
     const newTheme = theme === "dark" ? "light" : "dark";
-    setTheme(newTheme);
+    
+    // Check if View Transitions API is supported and prefers-reduced-motion is false
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!document.startViewTransition || prefersReducedMotion) {
+      setTheme(newTheme);
+      return;
+    }
+
+    const x = e.clientX;
+    const y = e.clientY;
+    const endRadius = Math.hypot(
+      Math.max(x, innerWidth - x),
+      Math.max(y, innerHeight - y)
+    );
+
+    const transition = document.startViewTransition(() => {
+      setTheme(newTheme);
+    });
+
+    transition.ready.then(() => {
+      const clipPath = [
+        `circle(0px at ${x}px ${y}px)`,
+        `circle(${endRadius}px at ${x}px ${y}px)`
+      ];
+      
+      document.documentElement.animate(
+        {
+          clipPath: newTheme === "dark" ? clipPath : [...clipPath].reverse(),
+        },
+        {
+          duration: 500,
+          easing: "ease-in-out",
+          pseudoElement: newTheme === "dark" ? "::view-transition-new(root)" : "::view-transition-old(root)",
+        }
+      );
+    });
   };
 
   const navItems = [

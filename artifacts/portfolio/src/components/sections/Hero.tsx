@@ -1,16 +1,28 @@
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion";
 import { ArrowDownRight, Download, ArrowRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { SiGithub, SiLinkedin, SiWhatsapp } from "react-icons/si";
+import { SiGithub, SiWhatsapp } from "react-icons/si";
+import { Linkedin as SiLinkedin } from "lucide-react";
 import { Mail } from "lucide-react";
 
-function KineticText({ text, delay = 0, yOffset = "100%" }: { text: string, delay?: number, yOffset?: string }) {
+function KineticText({ text, delay = 0, yOffset = "100%", mouseX, mouseY }: { text: string, delay?: number, yOffset?: string, mouseX?: any, mouseY?: any }) {
+  // Parallax effect based on mouse position
+  const parallaxX = mouseX ? useTransform(mouseX, [0, typeof window !== 'undefined' ? window.innerWidth : 1000], [-10, 10]) : 0;
+  const parallaxY = mouseY ? useTransform(mouseY, [0, typeof window !== 'undefined' ? window.innerHeight : 1000], [-10, 10]) : 0;
+  
+  // Disable parallax if prefers reduced motion or on touch devices
+  const isTouch = typeof window !== 'undefined' && window.matchMedia("(pointer: coarse)").matches;
+  const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  
+  const x = !isTouch && !prefersReducedMotion ? parallaxX : 0;
+  const yParallax = !isTouch && !prefersReducedMotion ? parallaxY : 0;
+
   return (
-    <div className="overflow-hidden flex">
+    <motion.div className="overflow-hidden flex" style={{ x, y: yParallax }}>
       {text.split("").map((char, index) => (
         <motion.span
           key={index}
-          initial={{ y: yOffset, rotate: 10, opacity: 0 }}
+          initial={{ y: yOffset, rotate: prefersReducedMotion ? 0 : 10, opacity: 0 }}
           animate={{ y: 0, rotate: 0, opacity: 1 }}
           transition={{
             duration: 1.2,
@@ -22,7 +34,7 @@ function KineticText({ text, delay = 0, yOffset = "100%" }: { text: string, dela
           {char === " " ? "\u00A0" : char}
         </motion.span>
       ))}
-    </div>
+    </motion.div>
   );
 }
 
@@ -60,6 +72,20 @@ export default function Hero() {
   // Use spring for smoother scroll-linked transforms
   const smoothY = useSpring(y, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
+  // Mouse position for parallax
+  const mouseX = useMotionValue(typeof window !== 'undefined' ? window.innerWidth / 2 : 0);
+  const mouseY = useMotionValue(typeof window !== 'undefined' ? window.innerHeight / 2 : 0);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
+    };
+    
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [mouseX, mouseY]);
+
   const scrollTo = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -67,12 +93,30 @@ export default function Hero() {
     }
   };
 
+  const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   return (
     <section id="home" ref={containerRef} className="relative min-h-[100dvh] flex flex-col justify-between pt-32 overflow-hidden bg-background">
       
-      {/* Background ambient gradient */}
-      <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-primary/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-foreground/5 rounded-full blur-[100px] pointer-events-none mix-blend-screen" />
+      {/* Background ambient gradient mesh */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div 
+          animate={prefersReducedMotion ? {} : { 
+            rotate: [0, 360], 
+            scale: [1, 1.1, 1] 
+          }}
+          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+          className="absolute top-[-30%] left-[-20%] w-[70%] h-[70%] bg-[conic-gradient(from_0deg_at_50%_50%,rgba(var(--primary),0.08)_0%,rgba(var(--background),0)_25%,rgba(var(--primary),0.02)_50%,rgba(var(--background),0)_75%,rgba(var(--primary),0.08)_100%)] rounded-full blur-[80px] mix-blend-screen" 
+        />
+        <motion.div 
+          animate={prefersReducedMotion ? {} : { 
+            rotate: [360, 0], 
+            scale: [1, 1.2, 1] 
+          }}
+          transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+          className="absolute bottom-[-20%] right-[-20%] w-[60%] h-[60%] bg-[radial-gradient(circle_at_center,rgba(var(--foreground),0.05)_0%,rgba(var(--background),0)_70%)] rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen" 
+        />
+      </div>
 
       <motion.div 
         style={{ y: smoothY, opacity, scale }} 
@@ -85,9 +129,13 @@ export default function Hero() {
           className="flex flex-wrap items-center gap-4 mb-8 md:mb-12"
         >
           <a href="https://wa.me/6285366195381" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-4 py-2 bg-muted/80 backdrop-blur-sm rounded-full border border-border/50 group hover:border-primary/50 transition-colors">
-            <div className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-50 duration-1000 ease-in-out"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+            <div className="relative flex h-2 w-2 items-center justify-center">
+              <motion.span 
+                animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0.2, 0.5] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute inline-flex h-full w-full rounded-full bg-primary"
+              ></motion.span>
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary"></span>
             </div>
             <span className="font-mono text-[10px] md:text-xs uppercase tracking-widest text-muted-foreground group-hover:text-foreground transition-colors">
               Currently building @ Freelance + KM ITERA
@@ -97,9 +145,9 @@ export default function Hero() {
         
         <h1 className="text-[clamp(3rem,14vw,12rem)] md:text-[11vw] lg:text-[10vw] leading-[0.8] font-display font-bold uppercase tracking-tighter flex flex-col gap-1 md:gap-3 relative">
           <div className="absolute inset-0 pointer-events-none bg-[url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')] opacity-[0.03] mix-blend-overlay z-10" />
-          <KineticText text="End-to-End" delay={0.5} yOffset="120%" />
+          <KineticText text="End-to-End" delay={0.5} yOffset="120%" mouseX={mouseX} mouseY={mouseY} />
           <div className="flex items-center gap-4 md:gap-8 relative z-0">
-            <KineticText text="Web" delay={0.7} yOffset="120%" />
+            <KineticText text="Web" delay={0.7} yOffset="120%" mouseX={mouseX} mouseY={mouseY} />
             <motion.div 
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
@@ -108,7 +156,7 @@ export default function Hero() {
             />
           </div>
           <div className="flex items-baseline gap-2 relative z-0">
-            <KineticText text="Architecture" delay={0.9} yOffset="120%" />
+            <KineticText text="Architecture" delay={0.9} yOffset="120%" mouseX={mouseX} mouseY={mouseY} />
             <motion.span 
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -202,7 +250,15 @@ export default function Hero() {
         transition={{ delay: 2, duration: 1 }}
       >
         <span className="writing-vertical rotate-180">Scroll to explore</span>
-        <ArrowDownRight className="w-4 h-4 animate-bounce" />
+        <motion.div 
+          className="w-[1px] h-12 bg-border relative overflow-hidden"
+        >
+          <motion.div 
+            className="absolute top-0 left-0 w-full h-full bg-primary"
+            animate={{ y: ["-100%", "100%"] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+          />
+        </motion.div>
       </motion.div>
     </section>
   );

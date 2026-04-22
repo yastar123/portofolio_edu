@@ -1,7 +1,9 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { MapPin, Mail, Phone, ExternalLink } from "lucide-react";
 import { useRef } from "react";
-import { SiGithub, SiLinkedin, SiWhatsapp } from "react-icons/si";
+import { SiGithub, SiWhatsapp } from "react-icons/si";
+import { Linkedin as SiLinkedin } from "lucide-react";
+import { SectionHeader } from "@/components/ui/SectionHeader";
 
 export default function About() {
   const ref = useRef<HTMLDivElement>(null);
@@ -14,21 +16,7 @@ export default function About() {
 
   return (
     <section id="about" className="relative bg-card overflow-hidden">
-      {/* Section Divider */}
-      <div className="py-6 border-y border-border/50 overflow-hidden flex whitespace-nowrap bg-muted/20">
-        <motion.div 
-          className="flex gap-8 text-xs md:text-sm font-mono uppercase tracking-widest text-muted-foreground"
-          animate={{ x: ["0%", "-50%"] }}
-          transition={{ duration: 25, ease: "linear", repeat: Infinity }}
-        >
-          {[...Array(8)].map((_, i) => (
-            <span key={i} className="flex items-center gap-8">
-              <span>§ 01 / THE PERSONA</span>
-              <span className="w-1 h-1 rounded-full bg-border" />
-            </span>
-          ))}
-        </motion.div>
-      </div>
+      <SectionHeader number="01" eyebrow="THE PERSONA" title="ABOUT" />
 
       <div className="py-24 md:py-32 px-6 md:px-12 lg:px-24" ref={ref}>
         <div className="max-w-7xl mx-auto grid lg:grid-cols-[1fr_1.5fr] gap-16 lg:gap-24 items-center">

@@ -1,5 +1,6 @@
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { motion, useInView } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
+import { SectionHeader } from "@/components/ui/SectionHeader";
 
 const skills = [
   {
@@ -24,10 +25,47 @@ const skills = [
   }
 ];
 
+function SpotlightCard({ children, className = "" }: { children: React.ReactNode, className?: string }) {
+  const divRef = useRef<HTMLDivElement>(null);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [opacity, setOpacity] = useState(0);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!divRef.current) return;
+    const rect = divRef.current.getBoundingClientRect();
+    setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
+
+  const handleMouseEnter = () => setOpacity(1);
+  const handleMouseLeave = () => setOpacity(0);
+
+  return (
+    <div
+      ref={divRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      className={`relative overflow-hidden ${className}`}
+    >
+      <div
+        className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300"
+        style={{
+          opacity,
+          background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(var(--primary), 0.1), transparent 40%)`,
+        }}
+      />
+      {children}
+    </div>
+  );
+}
+
 function Counter({ end, label }: { end: number, label: string }) {
   const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
   
   useEffect(() => {
+    if (!isInView) return;
     let startTime: number;
     let animationFrame: number;
     const duration = 2500;
@@ -50,16 +88,26 @@ function Counter({ end, label }: { end: number, label: string }) {
 
     animationFrame = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(animationFrame);
-  }, [end]);
+  }, [end, isInView]);
 
   return (
-    <div className="flex flex-col gap-2 relative group">
-      <span className="font-display text-6xl md:text-8xl font-bold tracking-tighter text-background group-hover:text-primary transition-colors duration-500">
+    <div ref={ref} className="flex flex-col gap-2 relative group">
+      <motion.span 
+        initial={{ y: 20, opacity: 0 }}
+        animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
+        transition={{ duration: 0.8, type: "spring", bounce: 0.4 }}
+        className="font-display text-6xl md:text-8xl font-bold tracking-tighter text-background group-hover:text-primary transition-colors duration-500"
+      >
         {count}+
-      </span>
-      <span className="font-mono text-xs md:text-sm uppercase tracking-widest text-background/60 border-t border-background/20 pt-4">
+      </motion.span>
+      <motion.span 
+        initial={{ opacity: 0 }}
+        animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ duration: 0.8, delay: 0.4 }}
+        className="font-mono text-xs md:text-sm uppercase tracking-widest text-background/60 border-t border-background/20 pt-4"
+      >
         {label}
-      </span>
+      </motion.span>
     </div>
   );
 }
@@ -68,21 +116,7 @@ export default function Expertise() {
   return (
     <section id="expertise" className="relative bg-foreground text-background overflow-hidden">
       
-      {/* Section Divider */}
-      <div className="py-6 border-y border-background/10 overflow-hidden flex whitespace-nowrap bg-background/5 absolute top-0 w-full">
-        <motion.div 
-          className="flex gap-8 text-xs md:text-sm font-mono uppercase tracking-widest text-background/50"
-          animate={{ x: ["0%", "-50%"] }}
-          transition={{ duration: 25, ease: "linear", repeat: Infinity }}
-        >
-          {[...Array(8)].map((_, i) => (
-            <span key={i} className="flex items-center gap-8">
-              <span>§ 03 / TECHNICAL CAPABILITIES</span>
-              <span className="w-1 h-1 rounded-full bg-background/20" />
-            </span>
-          ))}
-        </motion.div>
-      </div>
+      <SectionHeader number="03" eyebrow="TECHNICAL CAPABILITIES" title="EXPERTISE" />
 
       {/* Decorative background element */}
       <div className="absolute top-1/4 right-0 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px] pointer-events-none transform translate-x-1/3" />
@@ -109,35 +143,38 @@ export default function Expertise() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.8, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                className="space-y-8"
               >
-                <div className="border-b border-background/20 pb-4 flex justify-between items-end">
-                  <h4 className="text-3xl md:text-4xl font-display font-bold uppercase tracking-tight text-background">
-                    {skillGroup.category}
-                  </h4>
-                  <span className="font-mono text-sm text-primary">0{index + 1}</span>
-                </div>
-                
-                <p className="text-lg font-sans font-light text-background/60">
-                  {skillGroup.description}
-                </p>
-                
-                <div className="flex flex-wrap gap-3">
-                  {skillGroup.items.map((item, i) => (
-                    <motion.div 
-                      key={item} 
-                      whileHover={{ scale: 1.05, y: -5 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                      className="px-4 py-2.5 border border-background/20 rounded-full font-mono text-xs uppercase tracking-widest text-background/80 hover:bg-background hover:text-foreground hover:border-background transition-colors cursor-default relative group"
-                    >
-                      {item}
-                      <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-3 py-1 text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
-                        Experienced
-                        <div className="absolute bottom-[-4px] left-1/2 -translate-x-1/2 w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[4px] border-t-primary" />
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
+                <SpotlightCard className="p-8 rounded-2xl border border-background/10 bg-background/5 h-full">
+                  <div className="space-y-8 relative z-10">
+                    <div className="border-b border-background/20 pb-4 flex justify-between items-end">
+                      <h4 className="text-3xl md:text-4xl font-display font-bold uppercase tracking-tight text-background">
+                        {skillGroup.category}
+                      </h4>
+                      <span className="font-mono text-sm text-primary">0{index + 1}</span>
+                    </div>
+                    
+                    <p className="text-lg font-sans font-light text-background/60">
+                      {skillGroup.description}
+                    </p>
+                    
+                    <div className="flex flex-wrap gap-3">
+                      {skillGroup.items.map((item, i) => (
+                        <motion.div 
+                          key={item} 
+                          whileHover={{ scale: 1.05, y: -5 }}
+                          transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                          className="px-4 py-2.5 border border-background/20 rounded-full font-mono text-xs uppercase tracking-widest text-background/80 hover:bg-background hover:text-foreground hover:border-background transition-colors cursor-default relative group"
+                        >
+                          {item}
+                          <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-3 py-1 text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+                            Experienced
+                            <div className="absolute bottom-[-4px] left-1/2 -translate-x-1/2 w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[4px] border-t-primary" />
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                </SpotlightCard>
               </motion.div>
             ))}
           </div>
@@ -146,20 +183,14 @@ export default function Expertise() {
       
       {/* Proof / Stats Strip */}
       <div className="border-t border-background/10 bg-background/5 relative z-10">
-        <motion.div 
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 1 }}
-          className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 py-16 md:py-20"
-        >
+        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 py-16 md:py-20">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-8">
             <Counter end={10} label="Proyek Selesai" />
             <Counter end={5} label="Organisasi" />
             <Counter end={90} label="% Test Coverage" />
             <Counter end={3} label="Tahun Exp." />
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
