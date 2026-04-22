@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
@@ -51,79 +52,80 @@
 }
 
 :root {
-  --app-font-sans: 'Inter', sans-serif;
-  --app-font-serif: 'Georgia', serif;
+  --app-font-sans: 'Plus Jakarta Sans', sans-serif;
+  --app-font-serif: 'Playfair Display', serif;
   --app-font-mono: 'Space Mono', monospace;
-  --app-font-display: 'Syne', sans-serif;
+  --app-font-display: 'Bricolage Grotesque', sans-serif;
 
-  /* Warm off-white */
-  --background: 40 20% 97%;
-  /* Deep charcoal */
-  --foreground: 220 10% 15%;
+  /* Sophisticated off-white / bone */
+  --background: 45 20% 96%;
+  /* Deep ink/charcoal */
+  --foreground: 230 15% 12%;
   
-  --border: 220 10% 85%;
-  --input: 220 10% 85%;
-  --ring: 220 10% 15%;
+  --border: 230 10% 85%;
+  --input: 230 10% 85%;
+  --ring: 230 15% 12%;
 
-  --card: 40 20% 97%;
-  --card-foreground: 220 10% 15%;
-  --card-border: 220 10% 85%;
+  --card: 45 20% 98%;
+  --card-foreground: 230 15% 12%;
+  --card-border: 230 10% 85%;
 
-  --popover: 40 20% 97%;
-  --popover-foreground: 220 10% 15%;
-  --popover-border: 220 10% 85%;
+  --popover: 45 20% 98%;
+  --popover-foreground: 230 15% 12%;
+  --popover-border: 230 10% 85%;
 
-  /* Sophisticated burnt orange accent */
-  --primary: 20 80% 50%;
-  --primary-foreground: 40 20% 97%;
+  /* Vibrant Burnt Orange Accent */
+  --primary: 15 85% 55%;
+  --primary-foreground: 45 20% 98%;
   
-  --secondary: 220 10% 90%;
-  --secondary-foreground: 220 10% 15%;
+  --secondary: 230 10% 90%;
+  --secondary-foreground: 230 15% 12%;
 
-  --muted: 220 10% 90%;
-  --muted-foreground: 220 5% 45%;
+  --muted: 230 10% 90%;
+  --muted-foreground: 230 5% 45%;
 
-  --accent: 220 10% 90%;
-  --accent-foreground: 220 10% 15%;
+  /* Subtle Olive/Gold secondary accent */
+  --accent: 45 30% 85%;
+  --accent-foreground: 230 15% 12%;
 
   --destructive: 0 84% 60%;
-  --destructive-foreground: 40 20% 97%;
+  --destructive-foreground: 45 20% 96%;
 
-  --radius: 0rem; /* Brutalist/architectural sharp edges */
+  --radius: 0.5rem; 
 }
 
 .dark {
-  /* Deep charcoal */
-  --background: 220 10% 10%;
-  /* Warm off-white */
-  --foreground: 40 20% 95%;
+  /* Deep space black */
+  --background: 230 15% 8%;
+  /* Soft pearl */
+  --foreground: 45 10% 92%;
 
-  --border: 220 10% 20%;
-  --input: 220 10% 20%;
-  --ring: 220 10% 80%;
+  --border: 230 10% 20%;
+  --input: 230 10% 20%;
+  --ring: 230 10% 80%;
 
-  --card: 220 10% 10%;
-  --card-foreground: 40 20% 95%;
-  --card-border: 220 10% 20%;
+  --card: 230 15% 10%;
+  --card-foreground: 45 10% 92%;
+  --card-border: 230 10% 20%;
 
-  --popover: 220 10% 10%;
-  --popover-foreground: 40 20% 95%;
-  --popover-border: 220 10% 20%;
+  --popover: 230 15% 10%;
+  --popover-foreground: 45 10% 92%;
+  --popover-border: 230 10% 20%;
 
-  --primary: 20 80% 60%;
-  --primary-foreground: 220 10% 10%;
+  --primary: 15 85% 60%;
+  --primary-foreground: 230 15% 8%;
 
-  --secondary: 220 10% 15%;
-  --secondary-foreground: 40 20% 95%;
+  --secondary: 230 10% 15%;
+  --secondary-foreground: 45 10% 92%;
 
-  --muted: 220 10% 15%;
-  --muted-foreground: 220 5% 65%;
+  --muted: 230 10% 15%;
+  --muted-foreground: 230 5% 65%;
 
-  --accent: 220 10% 15%;
-  --accent-foreground: 40 20% 95%;
+  --accent: 230 10% 18%;
+  --accent-foreground: 45 10% 92%;
 
   --destructive: 0 62% 30%;
-  --destructive-foreground: 40 20% 95%;
+  --destructive-foreground: 45 10% 92%;
 }
 
 @layer base {
@@ -132,7 +134,7 @@
   }
 
   body {
-    @apply font-sans antialiased bg-background text-foreground overflow-x-hidden selection:bg-primary selection:text-primary-foreground;
+    @apply font-sans antialiased bg-background text-foreground overflow-x-hidden selection:bg-primary/20 selection:text-primary;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -142,20 +144,35 @@
 
 /* Hide scrollbar for cleaner look */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted-foreground) / 0.3);
-  border-radius: 4px;
+  background: hsl(var(--muted-foreground) / 0.2);
+  border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground) / 0.5);
+  background: hsl(var(--primary) / 0.5);
 }
 
 /* Cursor utility classes */
 .cursor-none-global * {
   cursor: none !important;
+}
+
+/* Noise overlay */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+.dark .noise-overlay {
+  opacity: 0.05;
 }

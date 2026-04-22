@@ -5,28 +5,40 @@ outputs = []
 id = "k3fdywsWyTpJl3v05ujxs"
 uri = "file://artifacts/portfolio/public/images/portrait.png"
 type = "image"
-title = "Black and white editorial portrait"
+title = "Abstract portrait of developer"
 
 [[generated]]
 id = "Q3YUmgG1yxQtU5I-WuitM"
 uri = "file://artifacts/portfolio/public/images/project-1.png"
 type = "image"
-title = "Abstract 3D glass shape"
+title = "News portal abstract art"
 
 [[generated]]
 id = "kcuughx_lvQB9oU1pC-fj"
 uri = "file://artifacts/portfolio/public/images/project-2.png"
 type = "image"
-title = "Minimalist UI mockup"
+title = "Student organization platform art"
 
 [[generated]]
 id = "4DJPlLRYL100n8dydGY5w"
 uri = "file://artifacts/portfolio/public/images/project-3.png"
 type = "image"
-title = "Brutalist typography poster"
+title = "Student orientation event art"
 
 [[generated]]
 id = "ytevYYPO-dGdijYI1JV7m"
 uri = "file://artifacts/portfolio/public/images/project-4.png"
 type = "image"
-title = "Dark mode data dashboard"
+title = "E-voting system abstract art"
+
+[[generated]]
+id = "MC8JF-fNKyWLPUMFE8gts"
+uri = "file://artifacts/portfolio/public/images/project-5.png"
+type = "image"
+title = "Healthcare platform abstract art"
+
+[[generated]]
+id = "sl30JOt3Oz9dopVyVXd2F"
+uri = "file://artifacts/portfolio/public/images/project-6.png"
+type = "image"
+title = "Organization website abstract art"
