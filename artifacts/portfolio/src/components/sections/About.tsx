@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { MapPin, Mail, Phone, ExternalLink } from "lucide-react";
 import { useRef } from "react";
+import { SiGithub, SiLinkedin, SiWhatsapp } from "react-icons/si";
 
 export default function About() {
   const ref = useRef<HTMLDivElement>(null);
@@ -84,7 +85,7 @@ export default function About() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4, duration: 1 }}
-              className="grid sm:grid-cols-2 md:grid-cols-3 gap-8 pt-12 border-t border-border/50"
+              className="grid sm:grid-cols-2 md:grid-cols-2 gap-8 pt-12 border-t border-border/50"
             >
               <div className="space-y-4 group">
                 <MapPin className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
@@ -97,19 +98,39 @@ export default function About() {
               <div className="space-y-4 group">
                 <Mail className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
                 <div>
-                  <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest mb-1 border-b border-border/30 inline-block pb-1">Contact</p>
-                  <a href="mailto:yastariskandar@gmail.com" className="block font-display text-xl font-bold mt-2 hover:text-primary transition-colors break-all">yastariskandar@...</a>
+                  <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest mb-1 border-b border-border/30 inline-block pb-1">Email</p>
+                  <a href="mailto:yastariskandar@gmail.com" className="flex items-center gap-2 font-display text-xl font-bold mt-2 hover:text-primary transition-colors break-all">
+                    yastariskandar@gmail.com
+                  </a>
                 </div>
               </div>
               
               <div className="space-y-4 group">
-                <Phone className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
+                <SiWhatsapp className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
                 <div>
-                  <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest mb-1 border-b border-border/30 inline-block pb-1">Phone</p>
+                  <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest mb-1 border-b border-border/30 inline-block pb-1">WhatsApp</p>
                   <a href="https://wa.me/6285366195381" target="_blank" rel="noopener noreferrer" className="font-display text-xl font-bold mt-2 hover:text-primary transition-colors flex items-center gap-2">
                     +62 853 6619 5381
                     <ExternalLink className="w-4 h-4 opacity-50" />
                   </a>
+                </div>
+              </div>
+
+              <div className="space-y-4 group">
+                <div className="flex gap-4">
+                  <SiLinkedin className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
+                  <SiGithub className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
+                </div>
+                <div>
+                  <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest mb-1 border-b border-border/30 inline-block pb-1">Socials</p>
+                  <div className="flex items-center gap-4 mt-2">
+                    <a href="https://www.linkedin.com/in/edu-juanda-pratama-861249297/" target="_blank" rel="noopener noreferrer" className="font-display text-xl font-bold hover:text-primary transition-colors flex items-center gap-1">
+                      LinkedIn <ExternalLink className="w-4 h-4 opacity-50" />
+                    </a>
+                    <a href="https://github.com/yastar123" target="_blank" rel="noopener noreferrer" className="font-display text-xl font-bold hover:text-primary transition-colors flex items-center gap-1">
+                      GitHub <ExternalLink className="w-4 h-4 opacity-50" />
+                    </a>
+                  </div>
                 </div>
               </div>
             </motion.div>

@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ArrowRight } from "lucide-react";
 
 const projects = [
   {
@@ -144,17 +144,15 @@ export default function Work() {
               </p>
               <div className="flex flex-wrap gap-2">
                 {project.tech.map(t => (
-                  <span key={t} className="px-3 py-1 border border-border/50 text-foreground font-mono text-[10px] uppercase tracking-wider rounded-full">
+                  <span key={t} className="px-2.5 py-1 bg-muted/50 border border-border text-muted-foreground font-mono text-[10px] uppercase tracking-wider rounded-md">
                     {t}
                   </span>
                 ))}
               </div>
-              <div className="pt-4">
-                <a href={project.link} className="inline-flex items-center gap-4 group/link">
-                  <span className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-border flex items-center justify-center group-hover/link:bg-foreground group-hover/link:text-background transition-colors duration-300">
-                    <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5 group-hover/link:rotate-45 transition-transform duration-300" />
-                  </span>
-                  <span className="font-mono text-xs md:text-sm uppercase tracking-widest font-semibold group-hover/link:translate-x-2 transition-transform duration-300">View Case</span>
+              <div className="pt-4 flex flex-col sm:flex-row gap-4">
+                <a href={project.link} className="inline-flex items-center justify-between gap-4 group/link w-full sm:w-auto px-6 py-4 border border-foreground bg-foreground text-background hover:bg-background hover:text-foreground transition-colors rounded-sm font-mono text-xs uppercase tracking-widest font-semibold">
+                  <span>Lihat Detail</span>
+                  <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
                 </a>
               </div>
             </div>
@@ -202,18 +200,22 @@ export default function Work() {
 
                     <div className="flex flex-wrap gap-2 pt-2">
                       {activeProject.tech.map(t => (
-                        <span key={t} className="px-3 py-1 border border-border/50 text-foreground font-mono text-[10px] uppercase tracking-wider rounded-full">
+                        <span key={t} className="px-3 py-1 bg-muted/50 border border-border text-muted-foreground font-mono text-[10px] uppercase tracking-wider rounded-md">
                           {t}
                         </span>
                       ))}
                     </div>
 
-                    <div className="pt-6">
-                      <a href={activeProject.link} className="inline-flex items-center gap-4 group/link">
+                    <div className="pt-6 flex items-center gap-6">
+                      <a href={activeProject.link} className="inline-flex items-center gap-3 group/link">
                         <span className="w-12 h-12 rounded-full border border-border flex items-center justify-center group-hover/link:bg-foreground group-hover/link:text-background group-hover/link:border-foreground transition-all duration-300">
                           <ArrowUpRight className="w-5 h-5 group-hover/link:rotate-45 transition-transform duration-300" />
                         </span>
                         <span className="font-mono text-sm uppercase tracking-widest font-semibold group-hover/link:translate-x-2 transition-transform duration-300">View Case</span>
+                      </a>
+                      <a href={activeProject.link} className="inline-flex items-center gap-2 group/link text-muted-foreground hover:text-foreground transition-colors font-mono text-xs uppercase tracking-widest">
+                        <span>Lihat Detail</span>
+                        <ArrowRight className="w-3 h-3 group-hover/link:translate-x-1 transition-transform" />
                       </a>
                     </div>
                   </motion.div>

@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { useTheme } from "@/components/theme-provider";
-import { Moon, Sun, ArrowUpRight, Menu, X } from "lucide-react";
+import { Moon, Sun, ArrowUpRight, Menu, X, Mail } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
+import { SiGithub, SiLinkedin, SiWhatsapp } from "react-icons/si";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -49,9 +50,7 @@ export default function Navbar() {
     }
   };
 
-  const handleThemeToggle = (e: React.MouseEvent) => {
-    // Add a simple subtle scale animation to the button instead of complex clip-paths
-    // as true page transitions are tricky in a single-page without massive re-renders
+  const handleThemeToggle = () => {
     const newTheme = theme === "dark" ? "light" : "dark";
     setTheme(newTheme);
   };
@@ -65,6 +64,10 @@ export default function Navbar() {
 
   return (
     <>
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-sm focus:font-mono focus:text-xs">
+        Skip to main content
+      </a>
+      
       <motion.header
         variants={{
           visible: { y: 0 },
@@ -140,12 +143,13 @@ export default function Navbar() {
                 </AnimatePresence>
               </motion.button>
               
-              <button 
-                onClick={() => scrollTo("contact")}
+              <a 
+                href="https://wa.me/6285366195381"
+                target="_blank" rel="noopener noreferrer"
                 className="hidden md:flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground font-mono text-xs uppercase tracking-widest rounded-full hover:bg-primary/90 transition-colors group overflow-hidden relative"
               >
                 <span className="relative z-10 flex items-center gap-2">
-                  Contact
+                  Hubungi
                   <ArrowUpRight className="w-3 h-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </span>
                 <motion.div 
@@ -154,11 +158,12 @@ export default function Navbar() {
                   whileHover={{ y: 0 }}
                   transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                 />
-              </button>
+              </a>
 
               <button 
                 className="lg:hidden w-10 h-10 rounded-full flex items-center justify-center border border-border/50 bg-background/50 hover:bg-accent transition-colors"
                 onClick={() => setMobileMenuOpen(true)}
+                aria-label="Open menu"
               >
                 <Menu className="w-4 h-4" />
               </button>
@@ -184,12 +189,13 @@ export default function Navbar() {
               <button 
                 onClick={() => setMobileMenuOpen(false)}
                 className="w-10 h-10 flex items-center justify-center border border-background/20 rounded-full"
+                aria-label="Close menu"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <nav className="flex flex-col gap-6 text-3xl md:text-4xl font-display uppercase tracking-tighter overflow-y-auto max-h-[60vh] pb-4">
+            <nav className="flex flex-col gap-6 text-3xl md:text-4xl font-display uppercase tracking-tighter overflow-y-auto flex-1">
               {navItems.map((item, i) => (
                 <motion.div
                   key={item.name}
@@ -206,18 +212,35 @@ export default function Navbar() {
                   </button>
                 </motion.div>
               ))}
+              
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 + navItems.length * 0.1 }}
-                className="mt-8 pt-8 border-t border-background/20"
+                className="mt-8 pt-8 border-t border-background/20 flex flex-col gap-8"
               >
-                <button 
-                  onClick={() => scrollTo("contact")}
-                  className="text-primary flex items-center gap-2"
+                <a 
+                  href="https://wa.me/6285366195381"
+                  target="_blank" rel="noopener noreferrer"
+                  className="text-primary flex items-center gap-2 w-fit"
                 >
-                  Contact <ArrowUpRight className="w-6 h-6" />
-                </button>
+                  Hubungi <ArrowUpRight className="w-6 h-6" />
+                </a>
+                
+                <div className="flex items-center gap-6 text-background/60">
+                  <a href="https://github.com/yastar123" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="hover:text-primary transition-colors">
+                    <SiGithub className="w-6 h-6" />
+                  </a>
+                  <a href="https://www.linkedin.com/in/edu-juanda-pratama-861249297/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="hover:text-primary transition-colors">
+                    <SiLinkedin className="w-6 h-6" />
+                  </a>
+                  <a href="https://wa.me/6285366195381" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="hover:text-primary transition-colors">
+                    <SiWhatsapp className="w-6 h-6" />
+                  </a>
+                  <a href="mailto:yastariskandar@gmail.com" aria-label="Email" className="hover:text-primary transition-colors">
+                    <Mail className="w-6 h-6" />
+                  </a>
+                </div>
               </motion.div>
             </nav>
           </motion.div>
