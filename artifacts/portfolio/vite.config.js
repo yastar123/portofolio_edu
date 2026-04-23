@@ -22,9 +22,10 @@ export default defineConfig({
     emptyOutDir: true,
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
-      input: {
-        main: path.resolve(__dirname, 'index.html'),
-      },
+      input: [
+        path.resolve(__dirname, 'index.html'),
+        path.resolve(__dirname, 'src/main.tsx')
+      ],
     },
   },
   server: {
