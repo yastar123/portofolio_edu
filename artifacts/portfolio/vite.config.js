@@ -13,7 +13,7 @@ export default defineConfig({
     },
     dedupe: ["react", "react-dom"],
   },
-  root: ".",
+  root: path.resolve(__dirname),
   build: {
     outDir: "dist/public",
     emptyOutDir: true,
