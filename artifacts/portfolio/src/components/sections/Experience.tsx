@@ -161,6 +161,15 @@ export default function Experience() {
   });
   
   const filters = ["Semua", "Pekerjaan", "Organisasi", "Kepanitiaan", "Sukarelawan"];
+
+  const filterCounts = useMemo(() => {
+    const total = experienceData.reduce((acc, g) => acc + g.items.length, 0);
+    const counts: Record<string, number> = { Semua: total };
+    experienceData.forEach((g) => {
+      counts[g.type] = g.items.length;
+    });
+    return counts;
+  }, []);
   
   const timelineItems = useMemo(() => {
     return experienceData.flatMap(group => 
@@ -237,8 +246,11 @@ export default function Experience() {
                       transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                     />
                   )}
-                  <span className={`relative z-10 transition-colors ${activeFilter === filter ? 'text-background' : 'text-muted-foreground group-hover:text-foreground'}`}>
+                  <span className={`relative z-10 inline-flex items-center gap-2 transition-colors ${activeFilter === filter ? 'text-background' : 'text-muted-foreground group-hover:text-foreground'}`}>
                     {filter}
+                    <span className={`tabular-nums text-[9px] opacity-70 ${activeFilter === filter ? 'text-background' : ''}`}>
+                      {String(filterCounts[filter] ?? 0).padStart(2, '0')}
+                    </span>
                   </span>
                 </button>
               ))}
@@ -289,8 +301,12 @@ export default function Experience() {
                   >
                     <div className="absolute inset-0 bg-muted/0 group-hover:bg-muted/30 rounded-2xl -mx-4 transition-colors duration-500 pointer-events-none -z-10" />
                     
-                    {/* Animated timeline node */}
-                    <div className="absolute left-0 md:left-[9px] top-2 w-4 h-4 bg-background border-2 border-border rounded-full group-hover:scale-150 group-hover:border-primary group-hover:bg-primary transition-all duration-500 z-10 ease-[0.76,0,0.24,1] transform -translate-x-[2px] md:-translate-x-1/2" />
+                    {/* Animated timeline node — concentric */}
+                    <div className="absolute left-0 md:left-[9px] top-2 z-10 transform -translate-x-[2px] md:-translate-x-1/2">
+                      <span aria-hidden className="absolute inset-0 -m-2 rounded-full border border-primary/0 group-hover:border-primary/30 group-hover:scale-110 transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)]" />
+                      <span aria-hidden className="absolute inset-0 -m-1 rounded-full border border-primary/0 group-hover:border-primary/60 transition-all duration-500" />
+                      <div className="relative w-4 h-4 bg-background border-2 border-border rounded-full group-hover:border-primary group-hover:bg-primary transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)]" />
+                    </div>
                     
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4 pt-1">
                       <div className="flex items-center gap-3 flex-wrap">

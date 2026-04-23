@@ -1,4 +1,4 @@
-import { motion, useInView } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowUp, MapPin } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import { SiGithub, SiWhatsapp } from "react-icons/si";
@@ -31,12 +31,20 @@ function Clock() {
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   const lastUpdated = new Intl.DateTimeFormat('id-ID', { dateStyle: 'long' }).format(new Date());
-  
-  const ejpRef = useRef(null);
-  const isEjpInView = useInView(ejpRef, { once: false, margin: "100px" });
+
+  const ejpRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: ejpScroll } = useScroll({
+    target: ejpRef,
+    offset: ["start end", "end start"],
+  });
+  const ejpX = useTransform(ejpScroll, [0, 1], ["8%", "-32%"]);
 
   return (
     <footer className="bg-foreground text-background pt-24 pb-6 px-6 md:px-12 lg:px-24 relative overflow-hidden">
+      {/* Ambient glow */}
+      <div aria-hidden className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 w-[80vw] h-[40vw] rounded-full blur-[120px] opacity-50"
+        style={{ background: "radial-gradient(circle at center, hsl(var(--primary) / 0.18), transparent 65%)" }}
+      />
       <div className="max-w-7xl mx-auto relative z-10">
         
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 mb-20">
@@ -83,18 +91,24 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mb-16 w-full overflow-hidden flex justify-center relative" ref={ejpRef}>
-          <motion.h2 
-            animate={isEjpInView ? { 
-              y: [0, -10, 0],
-              x: [0, 5, 0],
-              rotate: [0, 1, 0, -1, 0]
-            } : {}}
-            transition={{ duration: 20, ease: "linear", repeat: Infinity }}
-            className="text-[clamp(4rem,22vw,18rem)] leading-[0.8] font-display font-bold uppercase tracking-tighter text-background whitespace-nowrap transform-gpu"
+        <div className="mb-16 w-full overflow-hidden relative" ref={ejpRef}>
+          <motion.div
+            style={{ x: ejpX }}
+            className="flex items-baseline gap-10 whitespace-nowrap will-change-transform"
           >
-            EJP<span className="text-primary">.</span>
-          </motion.h2>
+            <h2 className="text-[clamp(4rem,22vw,18rem)] leading-[0.8] font-display font-bold uppercase tracking-tighter text-background">
+              EJP<span className="text-primary">.</span>
+            </h2>
+            <h2 aria-hidden className="text-[clamp(4rem,22vw,18rem)] leading-[0.8] font-display font-bold uppercase tracking-tighter text-stroke text-transparent">
+              EJP<span className="text-primary">.</span>
+            </h2>
+            <h2 aria-hidden className="text-[clamp(4rem,22vw,18rem)] leading-[0.8] font-display font-bold uppercase tracking-tighter text-background/30">
+              EJP<span className="text-primary/40">.</span>
+            </h2>
+          </motion.div>
+          {/* Edge fades */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-foreground to-transparent" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-foreground to-transparent" />
         </div>
         
         <div className="flex flex-col md:flex-row justify-between items-center gap-6 pt-6 border-t border-background/20">
