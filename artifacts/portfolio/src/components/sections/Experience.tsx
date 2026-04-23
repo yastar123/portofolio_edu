@@ -257,21 +257,31 @@ export default function Experience() {
             </div>
             
             {/* Active Year Marker Display (Desktop) */}
-            <div className="hidden lg:block pt-8 mt-8 border-t border-border/50">
+            <div className="hidden lg:flex flex-col gap-3 pt-8 mt-8 border-t border-border/50 relative">
+              <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground/70 flex items-center gap-2">
+                <span className="w-6 h-[1px] bg-border" />
+                Currently viewing
+              </span>
               <AnimatePresence mode="popLayout">
                 {activeYear && (
-                  <motion.div 
+                  <motion.div
                     key={activeYear}
-                    initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
+                    initial={{ opacity: 0, y: 14, filter: "blur(6px)" }}
                     animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, y: -10, filter: "blur(4px)", position: "absolute" }}
-                    transition={{ duration: 0.4 }}
-                    className="font-display text-7xl font-bold tracking-tighter text-border select-none"
+                    exit={{ opacity: 0, y: -14, filter: "blur(6px)", position: "absolute" }}
+                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    className="font-display text-[8rem] leading-[0.8] font-bold tracking-tighter text-stroke text-transparent select-none"
                   >
                     {activeYear}
                   </motion.div>
                 )}
               </AnimatePresence>
+              <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-widest text-muted-foreground tabular-nums">
+                <span className="text-foreground font-bold text-base">
+                  {String(timelineItems.length).padStart(2, '0')}
+                </span>
+                <span className="opacity-50">entries · {activeFilter}</span>
+              </div>
             </div>
           </div>
 
@@ -297,15 +307,21 @@ export default function Experience() {
                     transition={{ duration: 0.5, type: "spring", bounce: 0.2 }}
                     key={`${item.role}-${item.company}-${index}`}
                     data-year={item.yearMarker}
-                    className="timeline-item relative pl-8 md:pl-16 group"
+                    className="timeline-item relative pl-10 md:pl-16 group cursor-default"
                   >
-                    <div className="absolute inset-0 bg-muted/0 group-hover:bg-muted/30 rounded-2xl -mx-4 transition-colors duration-500 pointer-events-none -z-10" />
-                    
-                    {/* Animated timeline node — concentric */}
-                    <div className="absolute left-0 md:left-[9px] top-2 z-10 transform -translate-x-[2px] md:-translate-x-1/2">
-                      <span aria-hidden className="absolute inset-0 -m-2 rounded-full border border-primary/0 group-hover:border-primary/30 group-hover:scale-110 transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)]" />
-                      <span aria-hidden className="absolute inset-0 -m-1 rounded-full border border-primary/0 group-hover:border-primary/60 transition-all duration-500" />
-                      <div className="relative w-4 h-4 bg-background border-2 border-border rounded-full group-hover:border-primary group-hover:bg-primary transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)]" />
+                    <div className="absolute -inset-y-3 -inset-x-4 md:-inset-x-6 bg-muted/0 group-hover:bg-muted/40 rounded-2xl transition-colors duration-500 pointer-events-none -z-10" />
+                    <span aria-hidden className="absolute -inset-y-3 -inset-x-4 md:-inset-x-6 rounded-2xl ring-0 group-hover:ring-1 ring-primary/15 transition-all duration-500 pointer-events-none -z-10" />
+
+                    {/* Animated timeline node — concentric with constant pulse */}
+                    <div className="absolute left-0 md:left-[15px] top-3 z-10 -translate-x-1/2">
+                      <motion.span
+                        aria-hidden
+                        animate={{ scale: [1, 1.8, 1], opacity: [0.4, 0, 0.4] }}
+                        transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute inset-0 -m-1 rounded-full bg-primary/40 group-hover:bg-primary"
+                      />
+                      <span aria-hidden className="absolute inset-0 -m-2 rounded-full border border-primary/0 group-hover:border-primary/40 group-hover:scale-125 transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)]" />
+                      <div className="relative w-4 h-4 bg-background border-2 border-border rounded-full group-hover:border-primary group-hover:bg-primary group-hover:scale-110 transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] shadow-[0_0_0_4px_hsl(var(--card))]" />
                     </div>
                     
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4 pt-1">

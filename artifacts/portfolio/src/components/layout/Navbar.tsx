@@ -5,6 +5,7 @@ import { Moon, Sun, ArrowUpRight, Menu, X, Mail } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { SiGithub, SiWhatsapp } from "react-icons/si";
 import { Linkedin as SiLinkedin } from "lucide-react";
+import { MagneticButton } from "@/components/ui/MagneticButton";
 
 function NavbarClock() {
   const [time, setTime] = useState<Date | null>(null);
@@ -211,22 +212,24 @@ export default function Navbar() {
                 </AnimatePresence>
               </motion.button>
               
-              <a 
-                href="https://wa.me/6285366195381"
-                target="_blank" rel="noopener noreferrer"
-                className="hidden md:flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground font-mono text-xs uppercase tracking-widest rounded-full hover:bg-primary/90 transition-colors group overflow-hidden relative"
-              >
-                <span className="relative z-10 flex items-center gap-2">
-                  Hubungi
-                  <ArrowUpRight className="w-3 h-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </span>
-                <motion.div 
-                  className="absolute inset-0 bg-foreground" 
-                  initial={{ y: "100%" }}
-                  whileHover={{ y: 0 }}
-                  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                />
-              </a>
+              <MagneticButton className="hidden md:inline-block" strength={0.3}>
+                <a
+                  href="https://wa.me/6285366195381"
+                  target="_blank" rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground font-mono text-xs uppercase tracking-widest rounded-full hover:bg-primary/90 transition-colors group overflow-hidden relative shadow-[0_8px_24px_-8px_hsl(var(--primary)/0.6)]"
+                >
+                  <span className="relative z-10 flex items-center gap-2">
+                    Hubungi
+                    <ArrowUpRight className="w-3 h-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  </span>
+                  <motion.div
+                    className="absolute inset-0 bg-foreground"
+                    initial={{ y: "100%" }}
+                    whileHover={{ y: 0 }}
+                    transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                  />
+                </a>
+              </MagneticButton>
 
               <button 
                 className="lg:hidden w-10 h-10 rounded-full flex items-center justify-center border border-border/50 bg-background/50 hover:bg-accent transition-colors"

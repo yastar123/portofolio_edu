@@ -3,6 +3,7 @@ import { ArrowUp, MapPin } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import { SiGithub, SiWhatsapp } from "react-icons/si";
 import { Linkedin as SiLinkedin } from "lucide-react";
+import { MagneticButton } from "@/components/ui/MagneticButton";
 
 function Clock() {
   const [time, setTime] = useState(new Date());
@@ -61,12 +62,24 @@ export default function Footer() {
           
           <div className="lg:col-span-3 flex flex-col gap-6">
             <h4 className="font-mono text-[10px] uppercase tracking-widest text-background/40">Navigation</h4>
-            <nav className="flex flex-col gap-3 font-display text-xl uppercase tracking-tighter">
-              <button onClick={() => document.getElementById("home")?.scrollIntoView({ behavior: "smooth" })} className="text-left hover:text-primary transition-colors w-fit">Home</button>
-              <button onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })} className="text-left hover:text-primary transition-colors w-fit">About</button>
-              <button onClick={() => document.getElementById("work")?.scrollIntoView({ behavior: "smooth" })} className="text-left hover:text-primary transition-colors w-fit">Work</button>
-              <button onClick={() => document.getElementById("expertise")?.scrollIntoView({ behavior: "smooth" })} className="text-left hover:text-primary transition-colors w-fit">Expertise</button>
-              <button onClick={() => document.getElementById("experience")?.scrollIntoView({ behavior: "smooth" })} className="text-left hover:text-primary transition-colors w-fit">Experience</button>
+            <nav className="flex flex-col gap-1 font-display text-xl uppercase tracking-tighter">
+              {[
+                { id: "home", label: "Home" },
+                { id: "about", label: "About" },
+                { id: "work", label: "Work" },
+                { id: "expertise", label: "Expertise" },
+                { id: "experience", label: "Experience" },
+                { id: "contact", label: "Contact" },
+              ].map((nav) => (
+                <button
+                  key={nav.id}
+                  onClick={() => document.getElementById(nav.id)?.scrollIntoView({ behavior: "smooth" })}
+                  className="group relative text-left w-fit py-1 pl-0 hover:pl-4 transition-[padding] duration-500 ease-[cubic-bezier(0.76,0,0.24,1)]"
+                >
+                  <span aria-hidden className="absolute left-0 top-1/2 -translate-y-1/2 h-[2px] w-0 bg-primary group-hover:w-3 transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)]" />
+                  <span className="group-hover:text-primary transition-colors">{nav.label}</span>
+                </button>
+              ))}
             </nav>
           </div>
           
@@ -122,14 +135,16 @@ export default function Footer() {
           
           <div className="font-mono text-[10px] md:text-xs uppercase tracking-widest text-background/60 flex items-center gap-4">
             <Clock />
-            <button 
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="flex items-center gap-2 text-background hover:text-primary transition-colors group"
-              aria-label="Back to Top"
-            >
-              Back to top
-              <ArrowUp className="w-3 h-3 group-hover:-translate-y-1 transition-transform" />
-            </button>
+            <MagneticButton strength={0.4}>
+              <button
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                className="flex items-center gap-2 px-4 py-2 rounded-full border border-background/20 text-background hover:bg-background hover:text-foreground transition-colors group"
+                aria-label="Back to Top"
+              >
+                Back to top
+                <ArrowUp className="w-3 h-3 group-hover:-translate-y-1 transition-transform" />
+              </button>
+            </MagneticButton>
           </div>
         </div>
       </div>
