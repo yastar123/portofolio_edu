@@ -18,6 +18,9 @@ export default defineConfig({
     outDir: "dist/public",
     emptyOutDir: true,
     chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      input: "entry.js",
+    },
   },
   server: {
     port: 3000,
