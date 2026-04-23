@@ -5,6 +5,7 @@ import { SiGithub, SiWhatsapp } from "react-icons/si";
 import { Linkedin as SiLinkedin } from "lucide-react";
 import { Mail } from "lucide-react";
 import { MagneticButton } from "@/components/ui/MagneticButton";
+import { RotatingTagline } from "@/components/ui/RotatingTagline";
 
 function KineticText({ text, delay = 0, yOffset = "100%", mouseX, mouseY }: { text: string, delay?: number, yOffset?: string, mouseX: any, mouseY: any }) {
   // Parallax effect based on mouse position (hooks always called for stable order)
@@ -199,6 +200,19 @@ export default function Hero() {
           transition={{ duration: 1.2, delay: 1.5, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className="lg:col-span-7 max-w-xl">
+            <div className="mb-5 flex items-center gap-3 font-mono text-[10px] md:text-xs uppercase tracking-[0.22em] text-muted-foreground">
+              <span className="h-[1px] w-6 bg-primary" />
+              <span className="text-foreground/80">I build</span>
+              <RotatingTagline
+                items={[
+                  "scalable web apps",
+                  "snappy interfaces",
+                  "robust APIs",
+                  "delightful UX",
+                ]}
+                className="text-primary font-medium not-italic"
+              />
+            </div>
             <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground leading-relaxed font-sans font-light">
               Saya Edu Juanda Pratama, Full Stack Developer dari Bandar Lampung. 
               Membangun solusi digital yang scalable, aman, dan berfokus pada <span className="text-foreground font-medium underline decoration-primary/50 underline-offset-4">performa</span> & <span className="text-foreground font-medium underline decoration-primary/50 underline-offset-4">user experience</span>.

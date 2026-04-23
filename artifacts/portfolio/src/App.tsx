@@ -6,6 +6,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import CustomCursor from "@/components/CustomCursor";
+import { ScrollToTop } from "@/components/ui/ScrollToTop";
+import { SectionRail } from "@/components/ui/SectionRail";
 import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import Lenis from 'lenis';
@@ -214,6 +216,8 @@ function App() {
           <SmoothScrollProvider>
             <div className="noise-overlay"></div>
             <CornerAnnotations />
+            <SectionRail />
+            <ScrollToTop />
             <div className="cursor-none-global">
               <CustomCursor />
               <AnimatePresence mode="wait">
