@@ -75,7 +75,7 @@
   --popover-border: 230 10% 85%;
 
   /* Vibrant Burnt Orange Accent */
-  --primary: 15 85% 55%;
+  --primary: 14 90% 52%;
   --primary-foreground: 45 20% 98%;
   
   --secondary: 230 10% 90%;
@@ -112,7 +112,7 @@
   --popover-foreground: 45 10% 92%;
   --popover-border: 230 10% 20%;
 
-  --primary: 15 85% 60%;
+  --primary: 16 95% 62%;
   --primary-foreground: 230 15% 8%;
 
   --secondary: 230 10% 15%;
@@ -158,9 +158,27 @@
   background: hsl(var(--primary) / 0.8);
 }
 
-/* Cursor utility classes */
-.cursor-none-global * {
-  cursor: none !important;
+/* Cursor utility classes — only hide native cursor on devices that have a fine pointer
+   so touch users and accessibility tools keep their default cursor. */
+@media (hover: hover) and (pointer: fine) {
+  .cursor-none-global,
+  .cursor-none-global * {
+    cursor: none !important;
+  }
+  .cursor-none-global input,
+  .cursor-none-global textarea,
+  .cursor-none-global select,
+  .cursor-none-global [contenteditable="true"] {
+    cursor: text !important;
+  }
+}
+
+/* Subtle background grid for depth (very low opacity) */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, hsl(var(--foreground) / 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, hsl(var(--foreground) / 0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
 }
 
 /* Noise overlay */

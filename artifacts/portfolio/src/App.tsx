@@ -17,7 +17,7 @@ function InitialLoader({ onComplete }: { onComplete: () => void }) {
 
   useEffect(() => {
     let start = 0;
-    const duration = 1500;
+    const duration = 900;
     
     const animate = (time: number) => {
       if (!start) start = time;
@@ -101,7 +101,7 @@ function CornerAnnotations() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    return scrollYProgress.onChange((latest) => {
+    return scrollYProgress.on("change", (latest) => {
       setProgress(Math.round(latest * 100));
     });
   }, [scrollYProgress]);
@@ -138,8 +138,10 @@ function App() {
 
   useEffect(() => {
     const hasVisited = sessionStorage.getItem('hasVisited');
-    if (hasVisited) {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (hasVisited || prefersReducedMotion) {
       setLoading(false);
+      sessionStorage.setItem('hasVisited', 'true');
     }
   }, []);
 

@@ -72,7 +72,7 @@ export default function Work() {
   });
 
   useEffect(() => {
-    return scrollYProgress.onChange((latest) => {
+    return scrollYProgress.on("change", (latest) => {
       const index = Math.min(
         Math.floor(latest * projects.length),
         projects.length - 1

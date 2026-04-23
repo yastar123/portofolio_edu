@@ -5,15 +5,17 @@ import { SiGithub, SiWhatsapp } from "react-icons/si";
 import { Linkedin as SiLinkedin } from "lucide-react";
 import { Mail } from "lucide-react";
 
-function KineticText({ text, delay = 0, yOffset = "100%", mouseX, mouseY }: { text: string, delay?: number, yOffset?: string, mouseX?: any, mouseY?: any }) {
-  // Parallax effect based on mouse position
-  const parallaxX = mouseX ? useTransform(mouseX, [0, typeof window !== 'undefined' ? window.innerWidth : 1000], [-10, 10]) : 0;
-  const parallaxY = mouseY ? useTransform(mouseY, [0, typeof window !== 'undefined' ? window.innerHeight : 1000], [-10, 10]) : 0;
-  
+function KineticText({ text, delay = 0, yOffset = "100%", mouseX, mouseY }: { text: string, delay?: number, yOffset?: string, mouseX: any, mouseY: any }) {
+  // Parallax effect based on mouse position (hooks always called for stable order)
+  const winW = typeof window !== 'undefined' ? window.innerWidth : 1000;
+  const winH = typeof window !== 'undefined' ? window.innerHeight : 1000;
+  const parallaxX = useTransform(mouseX, [0, winW], [-10, 10]);
+  const parallaxY = useTransform(mouseY, [0, winH], [-10, 10]);
+
   // Disable parallax if prefers reduced motion or on touch devices
   const isTouch = typeof window !== 'undefined' && window.matchMedia("(pointer: coarse)").matches;
   const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  
+
   const x = !isTouch && !prefersReducedMotion ? parallaxX : 0;
   const yParallax = !isTouch && !prefersReducedMotion ? parallaxY : 0;
 
@@ -97,7 +99,10 @@ export default function Hero() {
 
   return (
     <section id="home" ref={containerRef} className="relative min-h-[100dvh] flex flex-col justify-between pt-32 overflow-hidden bg-background">
-      
+
+      {/* Subtle grid backdrop */}
+      <div className="absolute inset-0 bg-grid pointer-events-none [mask-image:radial-gradient(ellipse_at_center,_black_30%,_transparent_75%)]" />
+
       {/* Background ambient gradient mesh */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div 
