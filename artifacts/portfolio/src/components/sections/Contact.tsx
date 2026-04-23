@@ -199,7 +199,7 @@ export default function Contact() {
                     placeholder=" "
                     className="peer w-full bg-transparent border-b border-border focus:border-transparent outline-none font-display text-2xl md:text-4xl py-4 transition-colors placeholder:text-transparent relative z-10"
                   />
-                  <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-foreground transition-all duration-500 peer-focus:w-full" />
+                  <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-primary transition-all duration-500 peer-focus:w-full" />
                   <label 
                     htmlFor="name" 
                     className="absolute left-0 top-4 font-mono text-sm uppercase tracking-widest text-muted-foreground transition-all duration-300 peer-focus:-top-6 peer-focus:text-xs peer-focus:text-primary peer-valid:-top-6 peer-valid:text-xs peer-valid:text-foreground pointer-events-none"
@@ -216,7 +216,7 @@ export default function Contact() {
                     placeholder=" "
                     className="peer w-full bg-transparent border-b border-border focus:border-transparent outline-none font-display text-2xl md:text-4xl py-4 transition-colors placeholder:text-transparent relative z-10"
                   />
-                  <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-foreground transition-all duration-500 peer-focus:w-full" />
+                  <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-primary transition-all duration-500 peer-focus:w-full" />
                   <label 
                     htmlFor="email" 
                     className="absolute left-0 top-4 font-mono text-sm uppercase tracking-widest text-muted-foreground transition-all duration-300 peer-focus:-top-6 peer-focus:text-xs peer-focus:text-primary peer-valid:-top-6 peer-valid:text-xs peer-valid:text-foreground pointer-events-none"
@@ -234,18 +234,30 @@ export default function Contact() {
                     placeholder=" "
                     className="peer w-full bg-transparent border-b border-border focus:border-transparent outline-none font-display text-2xl md:text-4xl py-4 min-h-[150px] resize-none transition-colors placeholder:text-transparent relative z-10"
                   />
-                  <div className="absolute bottom-[4px] left-0 h-[2px] w-0 bg-foreground transition-all duration-500 peer-focus:w-full" />
+                  <div className="absolute bottom-[4px] left-0 h-[2px] w-0 bg-primary transition-all duration-500 peer-focus:w-full" />
                   <label
                     htmlFor="message"
                     className="absolute left-0 top-4 font-mono text-sm uppercase tracking-widest text-muted-foreground transition-all duration-300 peer-focus:-top-6 peer-focus:text-xs peer-focus:text-primary peer-valid:-top-6 peer-valid:text-xs peer-valid:text-foreground pointer-events-none"
                   >
                     Detail Proyek / Pesan
                   </label>
-                  <div className="mt-2 flex items-center justify-end gap-2 font-mono text-[10px] uppercase tracking-widest text-muted-foreground/70 tabular-nums">
-                    <span className={messageLength > MAX_MESSAGE * 0.85 ? "text-primary" : ""}>
-                      {messageLength.toString().padStart(3, "0")}
+                  <div className="mt-2 flex items-center justify-between gap-3 font-mono text-[10px] uppercase tracking-widest text-muted-foreground/70 tabular-nums">
+                    <div className="flex-1 h-[2px] bg-border/60 rounded-full overflow-hidden max-w-[60%]">
+                      <motion.div
+                        className={`h-full rounded-full origin-left ${
+                          messageLength > MAX_MESSAGE * 0.95 ? "bg-red-500" : messageLength > MAX_MESSAGE * 0.85 ? "bg-primary" : "bg-foreground"
+                        }`}
+                        animate={{ scaleX: messageLength / MAX_MESSAGE }}
+                        transition={{ duration: 0.3, ease: "easeOut" }}
+                        style={{ width: "100%" }}
+                      />
+                    </div>
+                    <span className="flex items-center gap-1">
+                      <span className={messageLength > MAX_MESSAGE * 0.85 ? "text-primary" : ""}>
+                        {messageLength.toString().padStart(3, "0")}
+                      </span>
+                      <span className="opacity-50">/ {MAX_MESSAGE}</span>
                     </span>
-                    <span className="opacity-50">/ {MAX_MESSAGE}</span>
                   </div>
                 </div>
 

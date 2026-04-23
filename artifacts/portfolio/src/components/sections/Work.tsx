@@ -173,12 +173,44 @@ export default function Work() {
       >
         <div className="sticky top-0 h-screen flex items-center overflow-hidden">
           
-          {/* Progress Rail */}
-          <div className="absolute right-12 top-1/2 -translate-y-1/2 w-[2px] h-[400px] bg-border/50 z-20 hidden xl:block rounded-full overflow-hidden">
-            <motion.div 
-              className="absolute top-0 left-0 w-full bg-primary origin-top"
-              style={{ scaleY: progressSpring, height: "100%" }}
-            />
+          {/* Progress Rail + Jump Dots */}
+          <div className="absolute right-10 top-1/2 -translate-y-1/2 z-20 hidden xl:flex flex-col items-center gap-4">
+            <div className="relative w-[2px] h-[300px] bg-border/50 rounded-full overflow-hidden">
+              <motion.div
+                className="absolute top-0 left-0 w-full bg-primary origin-top"
+                style={{ scaleY: progressSpring, height: "100%" }}
+              />
+            </div>
+            <ul className="flex flex-col gap-3">
+              {projects.map((p, i) => (
+                <li key={p.id}>
+                  <button
+                    onClick={() => {
+                      const el = containerRef.current;
+                      if (!el) return;
+                      const start = el.offsetTop;
+                      const segment = el.offsetHeight / projects.length;
+                      window.scrollTo({ top: start + segment * i + segment * 0.1, behavior: "smooth" });
+                    }}
+                    aria-label={`Lihat proyek ${p.title}`}
+                    className="group relative flex items-center gap-3 cursor-pointer"
+                  >
+                    <span
+                      className={`font-mono text-[10px] tabular-nums uppercase tracking-widest transition-all duration-300 ${
+                        activeIndex === i ? "text-foreground opacity-100" : "text-muted-foreground opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0"
+                      }`}
+                    >
+                      0{p.id}
+                    </span>
+                    <span
+                      className={`block h-[1px] transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] ${
+                        activeIndex === i ? "w-8 bg-primary" : "w-3 bg-border group-hover:w-5 group-hover:bg-foreground"
+                      }`}
+                    />
+                  </button>
+                </li>
+              ))}
+            </ul>
           </div>
 
           <div className="w-full px-24">
@@ -270,9 +302,23 @@ export default function Work() {
 
               {/* Image Side */}
               <div className="col-span-7 relative h-[600px] flex items-center justify-end">
+                {/* Giant stroke project number — sits behind image, slides in on change */}
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={`num-${activeProject.id}`}
+                    aria-hidden
+                    initial={{ opacity: 0, y: 30, x: -20 }}
+                    animate={{ opacity: 1, y: 0, x: 0 }}
+                    exit={{ opacity: 0, y: -30, position: "absolute" }}
+                    transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                    className="pointer-events-none absolute -left-12 top-1/2 -translate-y-1/2 font-display font-bold tracking-tighter text-stroke text-transparent select-none leading-none text-[18rem] xl:text-[22rem] z-0 opacity-90"
+                  >
+                    {String(activeProject.id).padStart(2, "0")}
+                  </motion.span>
+                </AnimatePresence>
                 <a
                   href={activeProject.link}
-                  className="w-full aspect-[4/3] relative rounded-sm overflow-hidden bg-muted block group ring-1 ring-border/40 shadow-[0_30px_60px_-30px_rgba(0,0,0,0.35)]"
+                  className="w-full aspect-[4/3] relative rounded-sm overflow-hidden bg-muted block group ring-1 ring-border/40 shadow-[0_30px_60px_-30px_rgba(0,0,0,0.35)] z-10"
                   data-cursor="view"
                 >
                   <AnimatePresence mode="wait">
