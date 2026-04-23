@@ -5,6 +5,7 @@ import path from "path";
 
 export default defineConfig({
   base: "/",
+  root: path.resolve(__dirname),
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
@@ -13,24 +14,8 @@ export default defineConfig({
     },
     dedupe: ["react", "react-dom"],
   },
-  root: path.resolve(__dirname),
   build: {
-    outDir: "dist/public",
+    outDir: "dist",
     emptyOutDir: true,
-    chunkSizeWarningLimit: 1000,
-  },
-  server: {
-    port: 3000,
-    strictPort: true,
-    host: "0.0.0.0",
-    allowedHosts: true,
-    fs: {
-      strict: true,
-    },
-  },
-  preview: {
-    port: 3000,
-    host: "0.0.0.0",
-    allowedHosts: true,
   },
 });
