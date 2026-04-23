@@ -84,7 +84,7 @@ function SpotlightCard({ children, className = "" }: { children: React.ReactNode
         className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300"
         style={{
           opacity,
-          background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(var(--primary), 0.1), transparent 40%)`,
+          background: `radial-gradient(500px circle at ${position.x}px ${position.y}px, hsl(var(--primary) / 0.15), transparent 40%)`,
         }}
       />
       {children}

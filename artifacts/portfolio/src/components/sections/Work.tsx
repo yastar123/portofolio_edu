@@ -1,7 +1,8 @@
-import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
+import { motion, useScroll, useSpring, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { ArrowUpRight, ArrowRight, ArrowDown } from "lucide-react";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { MagneticButton } from "@/components/ui/MagneticButton";
 
 const projects = [
   {
@@ -111,14 +112,25 @@ export default function Work() {
       {/* Mobile Stacked Layout (<1024px) */}
       <div className="block lg:hidden px-6 md:px-12 pb-24 space-y-20">
         {projects.map((project, i) => (
-          <div key={project.id} className="flex flex-col gap-8">
-            <div className="overflow-hidden bg-muted aspect-[4/3] md:aspect-video rounded-sm relative group">
-              <img 
-                src={project.image} 
+          <motion.div
+            key={project.id}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col gap-8"
+          >
+            <div className="overflow-hidden bg-muted aspect-[4/3] md:aspect-video rounded-sm relative group ring-1 ring-border/40 shadow-[0_20px_50px_-25px_rgba(0,0,0,0.3)] transition-shadow duration-500 hover:shadow-[0_30px_70px_-25px_rgba(0,0,0,0.45)]">
+              <img
+                src={project.image}
                 alt={project.title}
                 loading={i === 0 ? "eager" : "lazy"}
                 className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
               />
+              <span aria-hidden className="absolute top-3 left-3 w-3 h-3 border-t border-l border-white/40" />
+              <span aria-hidden className="absolute top-3 right-3 w-3 h-3 border-t border-r border-white/40" />
+              <span aria-hidden className="absolute bottom-3 left-3 w-3 h-3 border-b border-l border-white/40" />
+              <span aria-hidden className="absolute bottom-3 right-3 w-3 h-3 border-b border-r border-white/40" />
             </div>
             <div className="space-y-6">
               <div className="flex items-center gap-4 font-mono text-[10px] md:text-xs uppercase tracking-widest text-muted-foreground">
@@ -143,13 +155,13 @@ export default function Work() {
                 ))}
               </div>
               <div className="pt-4 flex flex-col sm:flex-row gap-4">
-                <a href={project.link} className="inline-flex items-center justify-between gap-4 group/link w-full sm:w-auto px-6 py-4 border border-foreground bg-foreground text-background hover:bg-background hover:text-foreground transition-colors rounded-sm font-mono text-xs uppercase tracking-widest font-semibold">
+                <a href={project.link} className="inline-flex items-center justify-between gap-4 group/link w-full sm:w-auto px-6 py-4 border border-foreground bg-foreground text-background hover:bg-background hover:text-foreground transition-colors rounded-full font-mono text-xs uppercase tracking-widest font-semibold min-h-[48px]">
                   <span>Lihat Detail</span>
                   <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
                 </a>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
 
@@ -223,12 +235,14 @@ export default function Work() {
                     </div>
 
                     <div className="pt-2 flex items-center gap-6 flex-wrap">
-                      <a href={activeProject.link} className="inline-flex items-center gap-3 group/link">
-                        <span className="w-12 h-12 rounded-full border border-border flex items-center justify-center group-hover/link:bg-foreground group-hover/link:text-background group-hover/link:border-foreground transition-all duration-300">
-                          <ArrowUpRight className="w-5 h-5 group-hover/link:rotate-45 transition-transform duration-300" />
-                        </span>
-                        <span className="font-mono text-sm uppercase tracking-widest font-semibold group-hover/link:translate-x-2 transition-transform duration-300">View Case</span>
-                      </a>
+                      <MagneticButton strength={0.4}>
+                        <a href={activeProject.link} className="inline-flex items-center gap-3 group/link">
+                          <span className="w-14 h-14 rounded-full border border-border flex items-center justify-center group-hover/link:bg-foreground group-hover/link:text-background group-hover/link:border-foreground transition-all duration-300 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.3)]">
+                            <ArrowUpRight className="w-5 h-5 group-hover/link:rotate-45 transition-transform duration-300" />
+                          </span>
+                          <span className="font-mono text-sm uppercase tracking-widest font-semibold group-hover/link:translate-x-2 transition-transform duration-300">View Case</span>
+                        </a>
+                      </MagneticButton>
                       <a href={activeProject.link} className="inline-flex items-center gap-2 group/link text-muted-foreground hover:text-foreground transition-colors font-mono text-xs uppercase tracking-widest">
                         <span>Lihat Detail</span>
                         <ArrowRight className="w-3 h-3 group-hover/link:translate-x-1 transition-transform" />

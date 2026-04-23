@@ -1,9 +1,10 @@
 import { motion, useInView } from "framer-motion";
 import { useState, useRef } from "react";
 import { toast } from "sonner";
-import { ArrowRight, ArrowUpRight, Mail, Phone, Linkedin as SiLinkedin, Copy, Check, ExternalLink } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Mail, Phone, Linkedin as SiLinkedin, Copy, Check, ExternalLink, Calendar, Clock } from "lucide-react";
 import { SiGithub, SiWhatsapp } from "react-icons/si";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { MagneticButton } from "@/components/ui/MagneticButton";
 
 function KineticText({ text }: { text: string }) {
   const ref = useRef(null);
@@ -63,7 +64,7 @@ function SpotlightContactCard({ children, href, canCopy, onClickCopy }: { childr
         className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300 z-0"
         style={{
           opacity,
-          background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(var(--primary), 0.15), transparent 40%)`,
+          background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, hsl(var(--primary) / 0.18), transparent 40%)`,
         }}
       />
       <div className="absolute inset-0 bg-primary/5 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-[0.76,0,0.24,1] z-0" />
@@ -73,10 +74,13 @@ function SpotlightContactCard({ children, href, canCopy, onClickCopy }: { childr
   );
 }
 
+const MAX_MESSAGE = 600;
+
 export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [messageLength, setMessageLength] = useState(0);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -91,7 +95,8 @@ export default function Contact() {
         duration: 5000,
       });
       (e.target as HTMLFormElement).reset();
-      
+      setMessageLength(0);
+
       setTimeout(() => setIsSuccess(false), 3000);
     }, 1500);
   };
@@ -221,34 +226,44 @@ export default function Contact() {
                 </div>
                 
                 <div className="relative group">
-                  <textarea 
-                    id="message" 
+                  <textarea
+                    id="message"
                     required
+                    maxLength={MAX_MESSAGE}
+                    onChange={(e) => setMessageLength(e.target.value.length)}
                     placeholder=" "
                     className="peer w-full bg-transparent border-b border-border focus:border-transparent outline-none font-display text-2xl md:text-4xl py-4 min-h-[150px] resize-none transition-colors placeholder:text-transparent relative z-10"
                   />
                   <div className="absolute bottom-[4px] left-0 h-[2px] w-0 bg-foreground transition-all duration-500 peer-focus:w-full" />
-                  <label 
-                    htmlFor="message" 
+                  <label
+                    htmlFor="message"
                     className="absolute left-0 top-4 font-mono text-sm uppercase tracking-widest text-muted-foreground transition-all duration-300 peer-focus:-top-6 peer-focus:text-xs peer-focus:text-primary peer-valid:-top-6 peer-valid:text-xs peer-valid:text-foreground pointer-events-none"
                   >
                     Detail Proyek / Pesan
                   </label>
+                  <div className="mt-2 flex items-center justify-end gap-2 font-mono text-[10px] uppercase tracking-widest text-muted-foreground/70 tabular-nums">
+                    <span className={messageLength > MAX_MESSAGE * 0.85 ? "text-primary" : ""}>
+                      {messageLength.toString().padStart(3, "0")}
+                    </span>
+                    <span className="opacity-50">/ {MAX_MESSAGE}</span>
+                  </div>
                 </div>
 
-                <button 
-                  type="submit" 
-                  disabled={isSubmitting}
-                  className="group/btn inline-flex items-center justify-between py-6 px-12 rounded-full border border-foreground bg-foreground text-background hover:bg-background hover:text-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden relative w-full md:w-auto mt-8"
-                >
-                  <span className="font-mono text-sm uppercase tracking-widest relative z-10 font-bold">
-                    {isSubmitting ? 'MENGIRIM...' : isSuccess ? 'TERKIRIM!' : 'KIRIM PESAN'}
-                  </span>
-                  <span className="relative z-10 ml-8">
-                    {isSuccess ? <Check className="w-5 h-5 text-green-500" /> : <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-2 transition-transform" />}
-                  </span>
-                  <div className="absolute inset-0 bg-primary translate-y-[100%] rounded-full group-hover/btn:translate-y-0 transition-transform duration-500 ease-[0.76,0,0.24,1]" />
-                </button>
+                <MagneticButton className="inline-block w-full md:w-auto" strength={0.3}>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="group/btn inline-flex items-center justify-between gap-8 py-6 px-12 rounded-full border border-foreground bg-foreground text-background hover:bg-background hover:text-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden relative w-full md:w-auto mt-8 shadow-[0_20px_50px_-20px_hsl(var(--foreground)/0.45)]"
+                  >
+                    <span className="font-mono text-sm uppercase tracking-widest relative z-10 font-bold">
+                      {isSubmitting ? 'MENGIRIM...' : isSuccess ? 'TERKIRIM!' : 'KIRIM PESAN'}
+                    </span>
+                    <span className="relative z-10">
+                      {isSuccess ? <Check className="w-5 h-5 text-green-500" /> : <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-2 transition-transform" />}
+                    </span>
+                    <div className="absolute inset-0 bg-primary translate-y-[100%] rounded-full group-hover/btn:translate-y-0 transition-transform duration-500 ease-[0.76,0,0.24,1]" />
+                  </button>
+                </MagneticButton>
               </form>
 
               <div className="mt-8 pt-8 border-t border-border flex items-center gap-3">
@@ -271,17 +286,64 @@ export default function Contact() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="lg:col-span-5 flex flex-col justify-center"
             >
-              <div className="bg-card border border-border p-8 rounded-sm space-y-6">
-                <h4 className="font-display font-bold text-2xl uppercase tracking-tighter">Lokasi</h4>
-                <div className="space-y-2">
-                  <p className="font-mono text-sm text-muted-foreground">Bandar Lampung, Indonesia</p>
-                  <p className="font-mono text-sm text-muted-foreground">GMT+7</p>
-                </div>
-                <div className="h-[1px] w-full bg-border" />
-                <h4 className="font-display font-bold text-2xl uppercase tracking-tighter">Status</h4>
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-muted rounded-full border border-border/50">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                  <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Available for work</span>
+              <div className="relative bg-card border border-border p-8 rounded-sm overflow-hidden shadow-[0_30px_60px_-30px_rgba(0,0,0,0.25)]">
+                <div aria-hidden className="absolute inset-0 bg-mesh opacity-60 pointer-events-none" />
+                <div className="relative space-y-6">
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">Now</span>
+                    <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-primary">Live</span>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="mt-1 relative flex h-3 w-3 items-center justify-center shrink-0">
+                      <motion.span
+                        animate={{ scale: [1, 1.6, 1], opacity: [0.5, 0.1, 0.5] }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute inline-flex h-full w-full rounded-full bg-green-500"
+                      />
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
+                    </div>
+                    <h4 className="font-display font-bold text-3xl md:text-4xl uppercase tracking-tighter leading-[0.9]">
+                      Available <br /><span className="text-primary italic font-serif lowercase tracking-normal">for work</span>
+                    </h4>
+                  </div>
+
+                  <div className="h-[1px] w-full bg-border" />
+
+                  <ul className="space-y-4">
+                    <li className="flex items-start gap-3">
+                      <Clock className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
+                      <div>
+                        <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">Response</p>
+                        <p className="font-display text-base font-bold mt-0.5">~ 24 jam · Mon–Sat</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <Calendar className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
+                      <div>
+                        <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">Booking</p>
+                        <p className="font-display text-base font-bold mt-0.5">Q3 2026 onwards</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <Mail className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
+                      <div>
+                        <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">Base · GMT+7</p>
+                        <p className="font-display text-base font-bold mt-0.5">Bandar Lampung, ID</p>
+                      </div>
+                    </li>
+                  </ul>
+
+                  <div className="pt-4 border-t border-border/60 grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="font-display text-3xl font-bold tabular-nums">15<span className="text-primary">+</span></p>
+                      <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mt-1">Projects shipped</p>
+                    </div>
+                    <div>
+                      <p className="font-display text-3xl font-bold tabular-nums">3<span className="text-primary">y</span></p>
+                      <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mt-1">Building on web</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </motion.div>
