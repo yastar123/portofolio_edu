@@ -1,10 +1,35 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link } from "wouter";
 import { useTheme } from "@/components/theme-provider";
 import { Moon, Sun, ArrowUpRight, Menu, X, Mail } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { SiGithub, SiWhatsapp } from "react-icons/si";
 import { Linkedin as SiLinkedin } from "lucide-react";
+
+function NavbarClock() {
+  const [time, setTime] = useState<Date | null>(null);
+  useEffect(() => {
+    setTime(new Date());
+    const t = setInterval(() => setTime(new Date()), 1000 * 30);
+    return () => clearInterval(t);
+  }, []);
+  const formatter = useMemo(
+    () =>
+      new Intl.DateTimeFormat("en-GB", {
+        hour: "2-digit",
+        minute: "2-digit",
+        timeZone: "Asia/Jakarta",
+        hour12: false,
+      }),
+    []
+  );
+  if (!time) return null;
+  return (
+    <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground tabular-nums">
+      BDL {formatter.format(time)}
+    </span>
+  );
+}
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -116,13 +141,20 @@ export default function Navbar() {
         }`}
       >
         <div className="px-6 md:px-12 lg:px-24 flex items-center justify-between">
-          <div className="flex items-center gap-2 md:gap-4">
+          <div className="flex items-center gap-3 md:gap-5">
             <Link href="/" className="font-display font-bold text-xl uppercase tracking-tighter hover:text-primary transition-colors group flex items-center gap-2">
               EJP<span className="text-primary group-hover:opacity-0 transition-opacity">.</span>
             </Link>
-            <div className="hidden sm:flex items-center gap-2 px-2 py-1 bg-muted rounded-full text-[10px] font-mono uppercase tracking-widest text-muted-foreground border border-border/50">
-              <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-              <span>ID</span>
+            <div className="hidden sm:flex items-center gap-2 px-2.5 py-1 bg-muted/70 rounded-full border border-border/50">
+              <div className="relative flex h-1.5 w-1.5 items-center justify-center">
+                <motion.span
+                  animate={{ scale: [1, 1.8, 1], opacity: [0.6, 0, 0.6] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute inline-flex h-full w-full rounded-full bg-green-500"
+                />
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500" />
+              </div>
+              <NavbarClock />
             </div>
           </div>
 

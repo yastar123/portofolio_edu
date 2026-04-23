@@ -41,21 +41,32 @@ function KineticText({ text, delay = 0, yOffset = "100%", mouseX, mouseY }: { te
 }
 
 function Marquee() {
+  const items = [
+    "FULL STACK DEVELOPER",
+    "BANDAR LAMPUNG · ID",
+    "AVAILABLE Q2 2026",
+    "REACT · LARAVEL · NEXT.JS",
+    "CRAFTED WITH CARE",
+  ];
   return (
-    <div className="relative w-full overflow-hidden bg-foreground text-background py-3 md:py-4 flex items-center mt-auto border-t border-border/20 z-20 group">
-      <motion.div 
-        className="flex whitespace-nowrap gap-8 pr-8 text-xs md:text-sm font-mono uppercase tracking-widest group-hover:[animation-play-state:paused]"
+    <div className="relative w-full overflow-hidden bg-foreground text-background py-3.5 md:py-4 flex items-center mt-auto border-t border-border/20 z-20 group">
+      {/* Edge fades */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-foreground to-transparent z-10" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-foreground to-transparent z-10" />
+
+      <motion.div
+        className="flex whitespace-nowrap gap-10 pr-10 text-xs md:text-sm font-mono uppercase tracking-[0.18em] group-hover:[animation-play-state:paused]"
         animate={{ x: ["0%", "-50%"] }}
-        transition={{ duration: 40, ease: "linear", repeat: Infinity }}
+        transition={{ duration: 45, ease: "linear", repeat: Infinity }}
       >
-        {[...Array(6)].map((_, i) => (
-          <span key={i} className="flex items-center gap-8">
-            <span>FULL STACK DEVELOPER</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-            <span>BANDAR LAMPUNG</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-            <span>AVAILABLE FOR WORK</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+        {[...Array(8)].map((_, i) => (
+          <span key={i} className="flex items-center gap-10">
+            {items.map((item, j) => (
+              <span key={j} className="flex items-center gap-10">
+                <span>{item}</span>
+                <span aria-hidden className="text-primary text-base leading-none">✦</span>
+              </span>
+            ))}
           </span>
         ))}
       </motion.div>
