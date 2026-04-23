@@ -3,6 +3,8 @@ import { MapPin, Mail, ExternalLink, Linkedin as SiLinkedin } from "lucide-react
 import { useRef } from "react";
 import { SiWhatsapp } from "react-icons/si";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { CountUp } from "@/components/ui/CountUp";
+import { SplitText } from "@/components/ui/SplitText";
 
 export default function About() {
   const ref = useRef<HTMLDivElement>(null);
@@ -82,7 +84,10 @@ export default function About() {
               className="absolute -bottom-4 -right-4 md:-bottom-6 md:-right-6 bg-background border border-border/60 rounded-sm shadow-[0_18px_40px_-18px_rgba(0,0,0,0.35)] px-4 py-3 md:px-5 md:py-4 z-20 group-hover:opacity-0 group-hover:translate-y-2 transition-all duration-500"
             >
               <div className="flex items-baseline gap-3">
-                <span className="font-display text-3xl md:text-4xl font-bold tracking-tighter leading-none">3<span className="text-primary">+</span></span>
+                <span className="font-display text-3xl md:text-4xl font-bold tracking-tighter leading-none">
+                  <CountUp to={3} duration={1.4} />
+                  <span className="text-primary">+</span>
+                </span>
                 <div className="flex flex-col">
                   <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-muted-foreground leading-tight">Years</span>
                   <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-muted-foreground leading-tight">Building</span>
@@ -104,10 +109,44 @@ export default function About() {
                 Manifesto · 01
               </div>
               <h3 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tighter leading-[0.95]">
-                Architecting <br />
-                <span className="italic font-serif lowercase text-primary tracking-normal">Clean</span> Digital <br />
-                Systems.
+                <SplitText as="span" splitBy="word" stagger={0.07} className="block">
+                  Architecting
+                </SplitText>
+                <span className="block">
+                  <SplitText as="span" splitBy="word" stagger={0.07} delay={0.15} className="inline italic font-serif lowercase text-primary tracking-normal">
+                    Clean
+                  </SplitText>
+                  {" "}
+                  <SplitText as="span" splitBy="word" stagger={0.07} delay={0.25} className="inline">
+                    Digital
+                  </SplitText>
+                </span>
+                <SplitText as="span" splitBy="word" stagger={0.07} delay={0.35} className="block">
+                  Systems.
+                </SplitText>
               </h3>
+
+              {/* Quick stat strip */}
+              <div className="flex flex-wrap items-end gap-x-10 gap-y-4 pt-2 border-t border-border/40 pt-6">
+                <div className="flex flex-col">
+                  <span className="font-display text-3xl md:text-4xl font-bold tracking-tighter leading-none">
+                    <CountUp to={20} duration={1.6} suffix="+" />
+                  </span>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground mt-2">Projects Shipped</span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-display text-3xl md:text-4xl font-bold tracking-tighter leading-none">
+                    <CountUp to={12} duration={1.6} />
+                  </span>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground mt-2">Tech Stack</span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-display text-3xl md:text-4xl font-bold tracking-tighter leading-none">
+                    <CountUp to={99} duration={1.8} suffix="%" />
+                  </span>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground mt-2">On-Time Delivery</span>
+                </div>
+              </div>
               
               <div className="space-y-6 text-xl md:text-2xl text-muted-foreground leading-relaxed font-sans font-light max-w-2xl">
                 <p>
