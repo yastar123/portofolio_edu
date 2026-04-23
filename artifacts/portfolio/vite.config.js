@@ -18,6 +18,9 @@ export default defineConfig({
     outDir: "dist/public",
     emptyOutDir: true,
     chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      input: path.resolve(__dirname, "src/main.tsx"),
+    },
   },
   server: {
     port: 3000,
