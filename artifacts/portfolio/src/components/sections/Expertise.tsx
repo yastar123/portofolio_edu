@@ -1,4 +1,4 @@
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 
@@ -63,32 +63,47 @@ function SpotlightCard({ children, className = "" }: { children: React.ReactNode
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [opacity, setOpacity] = useState(0);
 
+  // 3D tilt — normalized -0.5..0.5 then mapped to a small rotation
+  const xN = useMotionValue(0);
+  const yN = useMotionValue(0);
+  const rotateX = useSpring(useTransform(yN, [-0.5, 0.5], [4, -4]), { stiffness: 200, damping: 20 });
+  const rotateY = useSpring(useTransform(xN, [-0.5, 0.5], [-4, 4]), { stiffness: 200, damping: 20 });
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!divRef.current) return;
     const rect = divRef.current.getBoundingClientRect();
-    setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    setPosition({ x, y });
+    xN.set(x / rect.width - 0.5);
+    yN.set(y / rect.height - 0.5);
   };
 
   const handleMouseEnter = () => setOpacity(1);
-  const handleMouseLeave = () => setOpacity(0);
+  const handleMouseLeave = () => {
+    setOpacity(0);
+    xN.set(0);
+    yN.set(0);
+  };
 
   return (
-    <div
+    <motion.div
       ref={divRef}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      style={{ rotateX, rotateY, transformPerspective: 1200, transformStyle: "preserve-3d" }}
       className={`relative overflow-hidden ${className}`}
     >
       <div
         className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300"
         style={{
           opacity,
-          background: `radial-gradient(500px circle at ${position.x}px ${position.y}px, hsl(var(--primary) / 0.15), transparent 40%)`,
+          background: `radial-gradient(500px circle at ${position.x}px ${position.y}px, hsl(var(--primary) / 0.18), transparent 40%)`,
         }}
       />
-      {children}
-    </div>
+      <div style={{ transform: "translateZ(20px)" }}>{children}</div>
+    </motion.div>
   );
 }
 

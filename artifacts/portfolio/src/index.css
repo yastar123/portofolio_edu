@@ -266,6 +266,22 @@
   text-orientation: mixed;
 }
 
+/* Seamless CSS marquee — pauses on hover at the wrapper (.group:hover) */
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee-scroll 38s linear infinite;
+  will-change: transform;
+}
+.group:hover .marquee-track {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+}
+
 /* Noise overlay */
 .noise-overlay {
   position: fixed;
