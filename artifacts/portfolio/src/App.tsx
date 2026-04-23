@@ -37,28 +37,62 @@ function InitialLoader({ onComplete }: { onComplete: () => void }) {
   }, [onComplete]);
 
   return (
-    <motion.div 
-      className="fixed inset-0 z-[100] flex items-center justify-between px-6 md:px-12 lg:px-24 bg-background"
-      exit={{ opacity: 0, clipPath: "polygon(0 0, 100% 0, 100% 0, 0 0)" }}
-      transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
+    <motion.div
+      className="fixed inset-0 z-[100] flex flex-col bg-background overflow-hidden"
+      exit={{ y: "-100%" }}
+      transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
     >
-      <div className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
-        Loading System
-      </div>
-      
-      <div className="overflow-hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-baseline gap-4">
-        <motion.div
-          initial={{ y: "100%" }}
-          animate={{ y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="font-display text-5xl md:text-8xl font-bold tracking-tighter uppercase"
-        >
-          EJP<span className="text-primary">.</span>
-        </motion.div>
+      {/* Top meta row */}
+      <div className="flex items-center justify-between px-6 md:px-12 lg:px-24 pt-6 md:pt-8">
+        <div className="flex items-center gap-3 font-mono text-[10px] md:text-xs uppercase tracking-widest text-muted-foreground">
+          <span className="relative flex h-2 w-2 items-center justify-center">
+            <motion.span
+              animate={{ scale: [1, 1.6, 1], opacity: [0.6, 0.1, 0.6] }}
+              transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute inline-flex h-full w-full rounded-full bg-primary"
+            />
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary" />
+          </span>
+          Loading System
+        </div>
+        <div className="font-mono text-[10px] md:text-xs uppercase tracking-widest text-muted-foreground tabular-nums">
+          EJP / 2026
+        </div>
       </div>
 
-      <div className="font-display text-4xl md:text-6xl font-light">
-        {progress}%
+      {/* Centerpiece */}
+      <div className="flex-1 flex items-center justify-center px-6">
+        <div className="overflow-hidden flex items-baseline">
+          <motion.div
+            initial={{ y: "110%" }}
+            animate={{ y: 0 }}
+            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+            className="font-display text-7xl sm:text-8xl md:text-9xl font-bold tracking-tighter uppercase"
+          >
+            EJP<span className="text-primary">.</span>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Progress rail + counter */}
+      <div className="px-6 md:px-12 lg:px-24 pb-6 md:pb-8 flex items-end justify-between gap-6">
+        <div className="flex-1 max-w-2xl">
+          <div className="flex items-end justify-between mb-3 font-mono text-[10px] md:text-xs uppercase tracking-widest text-muted-foreground">
+            <span>End-to-End Web Architecture</span>
+            <span className="tabular-nums text-foreground">{progress.toString().padStart(3, "0")}%</span>
+          </div>
+          <div className="h-[2px] w-full bg-border/60 overflow-hidden rounded-full">
+            <motion.div
+              className="h-full bg-primary origin-left"
+              animate={{ scaleX: progress / 100 }}
+              transition={{ duration: 0.2, ease: "linear" }}
+              style={{ transformOrigin: "0% 50%" }}
+            />
+          </div>
+        </div>
+        <div className="hidden md:block font-mono text-[10px] uppercase tracking-widest text-muted-foreground tabular-nums">
+          BDL — GMT+7
+        </div>
       </div>
     </motion.div>
   );
@@ -91,7 +125,7 @@ function SmoothScrollProvider({ children }: { children: React.ReactNode }) {
 }
 
 function CornerAnnotations() {
-  const { scrollYProgress } = useScroll();
+  const { scrollY, scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
@@ -99,12 +133,21 @@ function CornerAnnotations() {
   });
 
   const [progress, setProgress] = useState(0);
+  const [pastHero, setPastHero] = useState(false);
 
   useEffect(() => {
     return scrollYProgress.on("change", (latest) => {
       setProgress(Math.round(latest * 100));
     });
   }, [scrollYProgress]);
+
+  useEffect(() => {
+    return scrollY.on("change", (latest) => {
+      // Hide corner meta while still in the Hero so it doesn't collide with the marquee
+      const threshold = typeof window !== "undefined" ? window.innerHeight * 0.6 : 400;
+      setPastHero(latest > threshold);
+    });
+  }, [scrollY]);
 
   return (
     <>
@@ -113,19 +156,27 @@ function CornerAnnotations() {
         className="fixed top-0 left-0 right-0 h-[2px] bg-primary origin-left z-[60] pointer-events-none"
         style={{ scaleX }}
       />
-      {/* Bottom-left meta — keeps top clear for the navbar */}
-      <div className="hidden md:flex fixed bottom-6 left-6 lg:bottom-8 lg:left-12 font-mono text-[10px] uppercase tracking-widest text-muted-foreground/60 z-40 mix-blend-difference pointer-events-none select-none items-center gap-3">
+      {/* Bottom-left meta — only shown after the Hero to avoid overlapping the marquee */}
+      <motion.div
+        className="hidden md:flex fixed bottom-6 left-6 lg:bottom-8 lg:left-12 font-mono text-[10px] uppercase tracking-widest text-muted-foreground/60 z-40 mix-blend-difference pointer-events-none select-none items-center gap-3"
+        animate={{ opacity: pastHero ? 1 : 0, y: pastHero ? 0 : 8 }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      >
         <span>EJP / 2026</span>
         <span className="w-6 h-[1px] bg-muted-foreground/30" />
         <span>BDL — GMT+7</span>
-      </div>
+      </motion.div>
       {/* Bottom-right scroll progress */}
-      <div className="fixed bottom-6 right-6 lg:bottom-8 lg:right-12 font-mono text-[10px] uppercase tracking-widest text-muted-foreground/70 z-40 mix-blend-difference flex items-center gap-3 pointer-events-none select-none">
+      <motion.div
+        className="fixed bottom-6 right-6 lg:bottom-8 lg:right-12 font-mono text-[10px] uppercase tracking-widest text-muted-foreground/70 z-40 mix-blend-difference flex items-center gap-3 pointer-events-none select-none"
+        animate={{ opacity: pastHero ? 1 : 0, y: pastHero ? 0 : 8 }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      >
         <div className="hidden md:block w-16 h-[1px] bg-muted-foreground/25">
           <motion.div className="h-full bg-primary origin-left" style={{ scaleX }} />
         </div>
         <span className="tabular-nums">{progress.toString().padStart(2, "0")}%</span>
-      </div>
+      </motion.div>
     </>
   );
 }

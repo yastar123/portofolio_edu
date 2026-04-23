@@ -1,9 +1,10 @@
 import { motion, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion";
-import { ArrowDownRight, Download, ArrowRight } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { ArrowDownRight, ArrowRight } from "lucide-react";
+import { useEffect, useRef } from "react";
 import { SiGithub, SiWhatsapp } from "react-icons/si";
 import { Linkedin as SiLinkedin } from "lucide-react";
 import { Mail } from "lucide-react";
+import { MagneticButton } from "@/components/ui/MagneticButton";
 
 function KineticText({ text, delay = 0, yOffset = "100%", mouseX, mouseY }: { text: string, delay?: number, yOffset?: string, mouseX: any, mouseY: any }) {
   // Parallax effect based on mouse position (hooks always called for stable order)
@@ -109,7 +110,7 @@ export default function Hero() {
   const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   return (
-    <section id="home" ref={containerRef} className="relative min-h-[100dvh] flex flex-col justify-between pt-32 overflow-hidden bg-background">
+    <section id="home" ref={containerRef} className="relative min-h-[100dvh] flex flex-col justify-between pt-24 md:pt-32 overflow-hidden bg-background">
 
       {/* Subtle grid backdrop */}
       <div className="absolute inset-0 bg-grid pointer-events-none [mask-image:radial-gradient(ellipse_at_center,_black_30%,_transparent_75%)]" />
@@ -207,26 +208,30 @@ export default function Hero() {
               Membangun solusi digital yang scalable, aman, dan berfokus pada <span className="text-foreground font-medium underline decoration-primary/50 underline-offset-4">performa</span> & <span className="text-foreground font-medium underline decoration-primary/50 underline-offset-4">user experience</span>.
             </p>
             
-            <div className="flex flex-col sm:flex-row items-center gap-4 mt-8 md:mt-10">
-              <a 
-                href="https://wa.me/6285366195381"
-                target="_blank" rel="noopener noreferrer"
-                className="group relative overflow-hidden flex items-center justify-center gap-3 px-8 py-4 min-h-[44px] bg-foreground text-background font-mono text-xs uppercase tracking-widest rounded-full w-full sm:w-auto hover:text-background"
-              >
-                <div className="absolute inset-0 bg-primary translate-y-[100%] rounded-full group-hover:translate-y-0 transition-transform duration-500 ease-[0.76,0,0.24,1]" />
-                <span className="relative z-10 flex items-center gap-2">
-                  Hubungi Saya
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </span>
-              </a>
-              
-              <button 
-                onClick={() => scrollTo("work")}
-                className="group flex items-center justify-center gap-3 px-8 py-4 min-h-[44px] border border-border hover:border-foreground text-foreground font-mono text-xs uppercase tracking-widest rounded-full transition-colors duration-500 w-full sm:w-auto"
-              >
-                <span>Lihat Karya</span>
-                <ArrowDownRight className="w-4 h-4 group-hover:translate-y-1 group-hover:translate-x-1 transition-transform" />
-              </button>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mt-8 md:mt-10">
+              <MagneticButton className="w-full sm:w-auto">
+                <a
+                  href="https://wa.me/6285366195381"
+                  target="_blank" rel="noopener noreferrer"
+                  className="group relative overflow-hidden flex items-center justify-center gap-3 px-8 py-4 min-h-[48px] bg-foreground text-background font-mono text-xs uppercase tracking-widest rounded-full w-full sm:w-auto hover:text-background shadow-[0_10px_30px_-10px_hsl(var(--foreground)/0.4)]"
+                >
+                  <div className="absolute inset-0 bg-primary translate-y-[100%] rounded-full group-hover:translate-y-0 transition-transform duration-500 ease-[0.76,0,0.24,1]" />
+                  <span className="relative z-10 flex items-center gap-2">
+                    Hubungi Saya
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </a>
+              </MagneticButton>
+
+              <MagneticButton className="w-full sm:w-auto" strength={0.25}>
+                <button
+                  onClick={() => scrollTo("work")}
+                  className="group flex items-center justify-center gap-3 px-8 py-4 min-h-[48px] border border-border hover:border-foreground text-foreground font-mono text-xs uppercase tracking-widest rounded-full transition-colors duration-500 w-full sm:w-auto"
+                >
+                  <span>Lihat Karya</span>
+                  <ArrowDownRight className="w-4 h-4 group-hover:translate-y-1 group-hover:translate-x-1 transition-transform" />
+                </button>
+              </MagneticButton>
             </div>
             
             <div className="flex items-center gap-4 mt-8 border-t border-border/50 pt-6">
@@ -271,7 +276,7 @@ export default function Hero() {
 
       <motion.div
         style={{ opacity }}
-        className="absolute bottom-20 md:bottom-28 right-6 md:right-12 lg:right-24 hidden md:flex flex-col items-center gap-4 text-[10px] font-mono uppercase tracking-widest text-muted-foreground"
+        className="absolute bottom-24 md:bottom-32 right-6 md:right-12 lg:right-24 hidden lg:flex flex-col items-center gap-4 text-[10px] font-mono uppercase tracking-widest text-muted-foreground"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 1 }}

@@ -144,6 +144,11 @@
     @apply font-sans antialiased bg-background text-foreground overflow-x-hidden selection:bg-primary selection:text-primary-foreground;
   }
 
+  /* Prevent horizontal overflow caused by edge transforms / oversized type */
+  html, body {
+    max-width: 100vw;
+  }
+
   h1, h2, h3, h4, h5, h6 {
     @apply font-display tracking-tight;
     text-wrap: balance;
@@ -247,6 +252,20 @@
   background-size: 56px 56px;
 }
 
+/* Sophisticated multi-layer gradient mesh */
+.bg-mesh {
+  background-image:
+    radial-gradient(at 18% 22%, hsl(var(--primary) / 0.18) 0px, transparent 55%),
+    radial-gradient(at 82% 78%, hsl(var(--foreground) / 0.10) 0px, transparent 55%),
+    radial-gradient(at 65% 18%, hsl(var(--primary) / 0.10) 0px, transparent 50%);
+}
+
+/* Vertical writing mode helper */
+.writing-vertical {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
 /* Noise overlay */
 .noise-overlay {
   position: fixed;
@@ -265,4 +284,15 @@
 *:focus-visible {
   outline: 2px solid hsl(var(--primary));
   outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* Subtle motion-safe reveal helper */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
