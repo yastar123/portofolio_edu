@@ -14,82 +14,184 @@ import Lenis from 'lenis';
 
 const queryClient = new QueryClient();
 
+const LOADER_STATUSES = [
+  "INITIALIZING",
+  "LOADING TYPEFACES",
+  "WARMING ANIMATIONS",
+  "ALMOST THERE",
+];
+
 function InitialLoader({ onComplete }: { onComplete: () => void }) {
   const [progress, setProgress] = useState(0);
+  const [statusIndex, setStatusIndex] = useState(0);
 
   useEffect(() => {
     let start = 0;
-    const duration = 900;
-    
+    const duration = 1600;
+
     const animate = (time: number) => {
       if (!start) start = time;
       const elapsed = time - start;
       const currentProgress = Math.min(Math.floor((elapsed / duration) * 100), 100);
-      
+
       setProgress(currentProgress);
-      
+
+      const nextIdx = Math.min(
+        Math.floor((currentProgress / 100) * LOADER_STATUSES.length),
+        LOADER_STATUSES.length - 1
+      );
+      setStatusIndex(nextIdx);
+
       if (currentProgress < 100) {
         requestAnimationFrame(animate);
       } else {
-        setTimeout(onComplete, 300);
+        setTimeout(onComplete, 500);
       }
     };
-    
+
     requestAnimationFrame(animate);
   }, [onComplete]);
+
+  const fullName = "EDU JUANDA PRATAMA";
+  const letters = fullName.split("");
 
   return (
     <motion.div
       className="fixed inset-0 z-[100] flex flex-col bg-background overflow-hidden"
-      exit={{ y: "-100%" }}
-      transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
+      exit={{ clipPath: "inset(0 0 100% 0)" }}
+      transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
     >
+      {/* Subtle grid backdrop */}
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-grid pointer-events-none [mask-image:radial-gradient(ellipse_at_center,_black_20%,_transparent_70%)] opacity-70"
+      />
+
+      {/* Decorative crosshairs (corners) */}
+      {[
+        "top-6 left-6 border-t border-l",
+        "top-6 right-6 border-t border-r",
+        "bottom-6 left-6 border-b border-l",
+        "bottom-6 right-6 border-b border-r",
+      ].map((c, i) => (
+        <motion.span
+          key={i}
+          aria-hidden
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 0.6, scale: 1 }}
+          transition={{ delay: 0.2 + i * 0.05, duration: 0.5 }}
+          className={`absolute w-4 h-4 border-foreground/40 ${c}`}
+        />
+      ))}
+
       {/* Top meta row */}
-      <div className="flex items-center justify-between px-6 md:px-12 lg:px-24 pt-6 md:pt-8">
-        <div className="flex items-center gap-3 font-mono text-[10px] md:text-xs uppercase tracking-widest text-muted-foreground">
+      <div className="relative flex items-center justify-between px-6 md:px-12 lg:px-24 pt-8 md:pt-10">
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.15 }}
+          className="flex items-center gap-3 font-mono text-[10px] md:text-xs uppercase tracking-widest text-muted-foreground"
+        >
           <span className="relative flex h-2 w-2 items-center justify-center">
             <motion.span
-              animate={{ scale: [1, 1.6, 1], opacity: [0.6, 0.1, 0.6] }}
+              animate={{ scale: [1, 1.7, 1], opacity: [0.6, 0.1, 0.6] }}
               transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
               className="absolute inline-flex h-full w-full rounded-full bg-primary"
             />
             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary" />
           </span>
-          Loading System
-        </div>
-        <div className="font-mono text-[10px] md:text-xs uppercase tracking-widest text-muted-foreground tabular-nums">
-          EJP / 2026
-        </div>
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={statusIndex}
+              initial={{ y: 6, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -6, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="inline-block"
+            >
+              {LOADER_STATUSES[statusIndex]}
+            </motion.span>
+          </AnimatePresence>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.25 }}
+          className="font-mono text-[10px] md:text-xs uppercase tracking-widest text-muted-foreground tabular-nums"
+        >
+          PORTFOLIO / 2026
+        </motion.div>
       </div>
 
-      {/* Centerpiece */}
-      <div className="flex-1 flex items-center justify-center px-6">
-        <div className="overflow-hidden flex items-baseline">
-          <motion.div
-            initial={{ y: "110%" }}
-            animate={{ y: 0 }}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-            className="font-display text-7xl sm:text-8xl md:text-9xl font-bold tracking-tighter uppercase"
-          >
-            EJP<span className="text-primary">.</span>
-          </motion.div>
-        </div>
+      {/* Centerpiece — split-letter name reveal */}
+      <div className="relative flex-1 flex flex-col items-center justify-center px-6 gap-6">
+        <motion.span
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          className="block w-12 h-[2px] bg-primary origin-left"
+        />
+
+        <h1
+          aria-label={fullName}
+          className="font-display font-bold uppercase tracking-tighter text-center leading-[0.85] text-[clamp(2.25rem,9vw,7rem)] flex flex-wrap justify-center max-w-[90vw]"
+        >
+          {letters.map((char, i) => (
+            <span key={i} className="inline-block overflow-hidden align-baseline">
+              <motion.span
+                initial={{ y: "110%", rotate: 8, opacity: 0 }}
+                animate={{ y: 0, rotate: 0, opacity: 1 }}
+                transition={{
+                  duration: 0.9,
+                  delay: 0.55 + i * 0.04,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                className="inline-block"
+              >
+                {char === " " ? "\u00A0" : char}
+              </motion.span>
+            </span>
+          ))}
+        </h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 1.3 }}
+          className="font-serif italic text-muted-foreground text-sm md:text-base"
+        >
+          full stack developer · <span className="text-primary not-italic font-mono uppercase tracking-widest text-xs">v2026.04</span>
+        </motion.p>
       </div>
 
       {/* Progress rail + counter */}
-      <div className="px-6 md:px-12 lg:px-24 pb-6 md:pb-8 flex items-end justify-between gap-6">
+      <div className="relative px-6 md:px-12 lg:px-24 pb-8 md:pb-10 flex items-end justify-between gap-6">
         <div className="flex-1 max-w-2xl">
           <div className="flex items-end justify-between mb-3 font-mono text-[10px] md:text-xs uppercase tracking-widest text-muted-foreground">
             <span>End-to-End Web Architecture</span>
-            <span className="tabular-nums text-foreground">{progress.toString().padStart(3, "0")}%</span>
+            <span className="tabular-nums text-foreground font-bold">
+              {progress.toString().padStart(3, "0")}
+              <span className="text-primary">%</span>
+            </span>
           </div>
-          <div className="h-[2px] w-full bg-border/60 overflow-hidden rounded-full">
+          <div className="relative h-[2px] w-full bg-border/60 overflow-hidden rounded-full">
             <motion.div
-              className="h-full bg-primary origin-left"
+              className="absolute inset-y-0 left-0 bg-primary origin-left"
               animate={{ scaleX: progress / 100 }}
               transition={{ duration: 0.2, ease: "linear" }}
-              style={{ transformOrigin: "0% 50%" }}
+              style={{ transformOrigin: "0% 50%", width: "100%" }}
             />
+            <motion.div
+              className="absolute inset-y-0 left-0 bg-primary/40 origin-left blur-sm"
+              animate={{ scaleX: progress / 100 }}
+              transition={{ duration: 0.2, ease: "linear" }}
+              style={{ transformOrigin: "0% 50%", width: "100%" }}
+            />
+          </div>
+          <div className="mt-3 flex items-center justify-between font-mono text-[9px] uppercase tracking-[0.25em] text-muted-foreground/60 tabular-nums">
+            <span>00 · idle</span>
+            <span>·</span>
+            <span>FF · ready</span>
           </div>
         </div>
         <div className="hidden md:block font-mono text-[10px] uppercase tracking-widest text-muted-foreground tabular-nums">

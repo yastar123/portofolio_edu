@@ -169,6 +169,18 @@
   }
 }
 
+/* Branded text selection */
+::selection {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  text-shadow: none;
+}
+::-moz-selection {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  text-shadow: none;
+}
+
 /* Refined scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

@@ -63,12 +63,22 @@ function Marquee() {
       <div
         className="marquee-track flex whitespace-nowrap text-xs md:text-sm font-mono uppercase tracking-[0.18em]"
       >
-        {sequence.map((item, i) => (
-          <span key={i} className="flex items-center px-6 md:px-8 shrink-0">
-            <span className="opacity-90">{item}</span>
-            <span aria-hidden className="text-primary text-base leading-none ml-6 md:ml-8">✦</span>
-          </span>
-        ))}
+        {sequence.map((item, i) => {
+          const symbol = ["✦", "◆", "★", "✺", "✚"][i % 5];
+          return (
+            <span key={i} className="flex items-center px-6 md:px-8 shrink-0">
+              <span className="opacity-90">{item}</span>
+              <motion.span
+                aria-hidden
+                animate={{ rotate: 360 }}
+                transition={{ duration: 12 + (i % 4) * 4, repeat: Infinity, ease: "linear" }}
+                className="text-primary text-base leading-none ml-6 md:ml-8 inline-block"
+              >
+                {symbol}
+              </motion.span>
+            </span>
+          );
+        })}
       </div>
     </div>
   );
