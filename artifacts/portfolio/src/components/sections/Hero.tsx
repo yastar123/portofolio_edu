@@ -8,6 +8,7 @@ import { MagneticButton } from "@/components/ui/MagneticButton";
 import { RotatingTagline } from "@/components/ui/RotatingTagline";
 import { LiveWaveBadge } from "@/components/ui/LiveWaveBadge";
 import { StarField } from "@/components/ui/StarField";
+import { RotatingStamp } from "@/components/ui/RotatingStamp";
 
 function KineticText({ text, delay = 0, yOffset = "100%", mouseX, mouseY }: { text: string, delay?: number, yOffset?: string, mouseX: any, mouseY: any }) {
   // Parallax effect based on mouse position (hooks always called for stable order)
@@ -126,6 +127,25 @@ export default function Hero() {
 
       {/* Twinkling star field — subtle depth */}
       <StarField count={32} className="opacity-60 [mask-image:radial-gradient(ellipse_at_center,_black_40%,_transparent_80%)]" />
+
+      {/* Rotating circular stamps — premium decorative anchors */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 hidden md:block">
+        <RotatingStamp
+          text="available · q2 2026"
+          size={160}
+          duration={28}
+          innerSymbol="✦"
+          className="absolute top-[18%] right-[6%] opacity-25 mix-blend-multiply dark:mix-blend-screen"
+        />
+        <RotatingStamp
+          text="bandar lampung · id"
+          size={120}
+          duration={36}
+          reverse
+          innerSymbol="◆"
+          className="absolute bottom-[22%] left-[4%] opacity-25 mix-blend-multiply dark:mix-blend-screen"
+        />
+      </div>
 
       {/* Background ambient aurora */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">

@@ -3,6 +3,7 @@ import { useRef, useState, useEffect } from "react";
 import { ArrowUpRight, ArrowRight, ArrowDown } from "lucide-react";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { MagneticButton } from "@/components/ui/MagneticButton";
+import { Tilt3D } from "@/components/ui/Tilt3D";
 
 const projects = [
   {
@@ -316,9 +317,10 @@ export default function Work() {
                     {String(activeProject.id).padStart(2, "0")}
                   </motion.span>
                 </AnimatePresence>
+                <Tilt3D max={6} scale={1.012} className="w-full z-10">
                 <a
                   href={activeProject.link}
-                  className="w-full aspect-[4/3] relative rounded-sm overflow-hidden bg-muted block group ring-1 ring-border/40 shadow-[0_30px_60px_-30px_rgba(0,0,0,0.35)] z-10"
+                  className="w-full aspect-[4/3] relative rounded-sm overflow-hidden bg-muted block group ring-1 ring-border/40 shadow-[0_30px_60px_-30px_rgba(0,0,0,0.35)]"
                   data-cursor="view"
                 >
                   <AnimatePresence mode="wait">
@@ -358,6 +360,7 @@ export default function Work() {
                   <span aria-hidden className="absolute bottom-3 left-3 w-3 h-3 border-b border-l border-white/40" />
                   <span aria-hidden className="absolute bottom-3 right-3 w-3 h-3 border-b border-r border-white/40" />
                 </a>
+                </Tilt3D>
               </div>
 
             </div>
