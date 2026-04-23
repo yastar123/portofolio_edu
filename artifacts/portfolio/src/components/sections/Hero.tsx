@@ -175,11 +175,11 @@ export default function Hero() {
           <KineticText text="End-to-End" delay={0.5} yOffset="120%" mouseX={mouseX} mouseY={mouseY} />
           <div className="flex items-center gap-4 md:gap-8 relative z-0">
             <KineticText text="Web" delay={0.7} yOffset="120%" mouseX={mouseX} mouseY={mouseY} />
-            <motion.div 
+            <motion.div
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{ duration: 1.5, delay: 1.2, ease: [0.76, 0, 0.24, 1] }}
-              className="h-[10px] md:h-[1vw] bg-primary flex-1 origin-left mt-2 md:mt-[2vw]"
+              className="relative h-[10px] md:h-[1vw] flex-1 origin-left mt-2 md:mt-[2vw] bg-gradient-to-r from-primary via-primary to-primary/40 rounded-[2px] shadow-[0_0_30px_-2px_hsl(var(--primary)/0.55)]"
             />
           </div>
           <div className="flex items-baseline gap-2 relative z-0">

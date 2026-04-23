@@ -108,6 +108,11 @@ function CornerAnnotations() {
 
   return (
     <>
+      {/* Top scroll progress bar */}
+      <motion.div
+        className="fixed top-0 left-0 right-0 h-[2px] bg-primary origin-left z-[60] pointer-events-none"
+        style={{ scaleX }}
+      />
       {/* Bottom-left meta — keeps top clear for the navbar */}
       <div className="hidden md:flex fixed bottom-6 left-6 lg:bottom-8 lg:left-12 font-mono text-[10px] uppercase tracking-widest text-muted-foreground/60 z-40 mix-blend-difference pointer-events-none select-none items-center gap-3">
         <span>EJP / 2026</span>
