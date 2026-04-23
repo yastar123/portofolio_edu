@@ -114,23 +114,34 @@ export default function Hero() {
       {/* Subtle grid backdrop */}
       <div className="absolute inset-0 bg-grid pointer-events-none [mask-image:radial-gradient(ellipse_at_center,_black_30%,_transparent_75%)]" />
 
-      {/* Background ambient gradient mesh */}
+      {/* Background ambient aurora */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div 
-          animate={prefersReducedMotion ? {} : { 
-            rotate: [0, 360], 
-            scale: [1, 1.1, 1] 
+        <motion.div
+          animate={prefersReducedMotion ? {} : { rotate: [0, 360], scale: [1, 1.15, 1] }}
+          transition={{ duration: 38, repeat: Infinity, ease: "linear" }}
+          className="absolute top-[-25%] left-[-15%] w-[75%] h-[75%] rounded-full blur-[90px] opacity-80 mix-blend-screen"
+          style={{
+            background:
+              "conic-gradient(from 0deg at 50% 50%, hsl(var(--primary) / 0.18) 0%, transparent 25%, hsl(var(--primary) / 0.08) 50%, transparent 75%, hsl(var(--primary) / 0.18) 100%)",
           }}
-          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-          className="absolute top-[-30%] left-[-20%] w-[70%] h-[70%] bg-[conic-gradient(from_0deg_at_50%_50%,rgba(var(--primary),0.08)_0%,rgba(var(--background),0)_25%,rgba(var(--primary),0.02)_50%,rgba(var(--background),0)_75%,rgba(var(--primary),0.08)_100%)] rounded-full blur-[80px] mix-blend-screen" 
         />
-        <motion.div 
-          animate={prefersReducedMotion ? {} : { 
-            rotate: [360, 0], 
-            scale: [1, 1.2, 1] 
+        <motion.div
+          animate={prefersReducedMotion ? {} : { rotate: [360, 0], scale: [1, 1.25, 1] }}
+          transition={{ duration: 52, repeat: Infinity, ease: "linear" }}
+          className="absolute bottom-[-25%] right-[-20%] w-[65%] h-[65%] rounded-full blur-[110px] mix-blend-multiply dark:mix-blend-screen"
+          style={{
+            background:
+              "radial-gradient(circle at center, hsl(var(--foreground) / 0.08) 0%, transparent 70%)",
           }}
-          transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
-          className="absolute bottom-[-20%] right-[-20%] w-[60%] h-[60%] bg-[radial-gradient(circle_at_center,rgba(var(--foreground),0.05)_0%,rgba(var(--background),0)_70%)] rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen" 
+        />
+        <motion.div
+          animate={prefersReducedMotion ? {} : { y: [0, -30, 0], opacity: [0.45, 0.65, 0.45] }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-1/4 right-[10%] w-[28rem] h-[28rem] rounded-full blur-[120px]"
+          style={{
+            background:
+              "radial-gradient(circle at center, hsl(var(--primary) / 0.22), transparent 65%)",
+          }}
         />
       </div>
 

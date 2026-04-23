@@ -256,26 +256,48 @@ export default function Work() {
 
               {/* Image Side */}
               <div className="col-span-7 relative h-[600px] flex items-center justify-end">
-                <div className="w-full aspect-[4/3] relative rounded-sm overflow-hidden bg-muted" data-cursor="view">
+                <a
+                  href={activeProject.link}
+                  className="w-full aspect-[4/3] relative rounded-sm overflow-hidden bg-muted block group ring-1 ring-border/40 shadow-[0_30px_60px_-30px_rgba(0,0,0,0.35)]"
+                  data-cursor="view"
+                >
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={activeProject.id}
-                      initial={{ opacity: 0, scale: 1.05 }}
+                      initial={{ opacity: 0, scale: 1.06 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0 }}
-                      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                      className="absolute inset-0 w-full h-full group"
+                      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                      className="absolute inset-0 w-full h-full"
                     >
-                      <img 
-                        src={activeProject.image} 
+                      <img
+                        src={activeProject.image}
                         alt={activeProject.title}
                         loading={activeProject.id === 1 ? "eager" : "lazy"}
-                        className="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 transition-all duration-700"
+                        className="w-full h-full object-cover grayscale-[0.25] group-hover:grayscale-0 group-hover:scale-[1.04] transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
                       />
-                      <div className="absolute inset-0 bg-background/5 mix-blend-overlay pointer-events-none transition-opacity duration-500 group-hover:opacity-0" />
+                      <div className="absolute inset-0 bg-foreground/10 mix-blend-multiply pointer-events-none transition-opacity duration-700 group-hover:opacity-0" />
                     </motion.div>
                   </AnimatePresence>
-                </div>
+
+                  {/* Bottom gradient + meta on hover */}
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="pointer-events-none absolute left-6 right-6 bottom-6 flex items-end justify-between text-white opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
+                    <div className="flex flex-col gap-1">
+                      <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/70">Open Case Study</span>
+                      <span className="font-display text-2xl font-bold uppercase tracking-tight">{activeProject.client}</span>
+                    </div>
+                    <span className="w-12 h-12 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
+                      <ArrowUpRight className="w-5 h-5" />
+                    </span>
+                  </div>
+
+                  {/* Corner crosshair markers */}
+                  <span aria-hidden className="absolute top-3 left-3 w-3 h-3 border-t border-l border-white/40" />
+                  <span aria-hidden className="absolute top-3 right-3 w-3 h-3 border-t border-r border-white/40" />
+                  <span aria-hidden className="absolute bottom-3 left-3 w-3 h-3 border-b border-l border-white/40" />
+                  <span aria-hidden className="absolute bottom-3 right-3 w-3 h-3 border-b border-r border-white/40" />
+                </a>
               </div>
 
             </div>

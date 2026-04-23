@@ -8,21 +8,26 @@ interface SectionHeaderProps {
 
 export function SectionHeader({ number, title, eyebrow }: SectionHeaderProps) {
   return (
-    <div className="py-6 border-y border-border/50 overflow-hidden flex whitespace-nowrap bg-muted/20 relative w-full z-10">
-      <motion.div 
-        className="flex gap-8 text-xs md:text-sm font-mono uppercase tracking-widest text-muted-foreground"
+    <div className="relative py-5 border-y border-border/60 overflow-hidden flex whitespace-nowrap w-full z-10 bg-gradient-to-r from-muted/40 via-muted/10 to-muted/40">
+      {/* Edge fades */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-background to-transparent z-10" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-background to-transparent z-10" />
+
+      <motion.div
+        className="flex gap-10 text-xs md:text-sm font-mono uppercase tracking-[0.22em] text-muted-foreground"
         animate={{ x: ["0%", "-50%"] }}
-        transition={{ duration: 25, ease: "linear", repeat: Infinity }}
+        transition={{ duration: 28, ease: "linear", repeat: Infinity }}
       >
-        {[...Array(8)].map((_, i) => (
-          <span key={i} className="flex items-center gap-8">
-            <span className="flex items-center gap-2">
-              <span className="text-primary">{number}</span>
-              <span className="opacity-50">/</span>
-              <span>{eyebrow}</span>
-              <span className="font-bold ml-2 text-foreground">{title}</span>
+        {[...Array(10)].map((_, i) => (
+          <span key={i} className="flex items-center gap-10">
+            <span className="flex items-center gap-3">
+              <span className="text-primary tabular-nums font-semibold">{number}</span>
+              <span className="opacity-40">/</span>
+              <span className="opacity-70">{eyebrow}</span>
+              <span aria-hidden className="opacity-30">—</span>
+              <span className="font-bold text-foreground">{title}</span>
             </span>
-            <span className="w-1 h-1 rounded-full bg-border" />
+            <span aria-hidden className="text-primary/70">✦</span>
           </span>
         ))}
       </motion.div>
