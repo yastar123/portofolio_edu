@@ -110,69 +110,13 @@ export default function Work() {
         </div>
       </div>
 
-      {/* Mobile Stacked Layout (<1024px) */}
-      <div className="block lg:hidden px-6 md:px-12 pb-24 space-y-20">
-        {projects.map((project, i) => (
-          <motion.div
-            key={project.id}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col gap-8"
-          >
-            <div className="overflow-hidden bg-muted aspect-[4/3] md:aspect-video rounded-sm relative group ring-1 ring-border/40 shadow-[0_20px_50px_-25px_rgba(0,0,0,0.3)] transition-shadow duration-500 hover:shadow-[0_30px_70px_-25px_rgba(0,0,0,0.45)]">
-              <img
-                src={project.image}
-                alt={project.title}
-                loading={i === 0 ? "eager" : "lazy"}
-                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-              />
-              <span aria-hidden className="absolute top-3 left-3 w-3 h-3 border-t border-l border-white/40" />
-              <span aria-hidden className="absolute top-3 right-3 w-3 h-3 border-t border-r border-white/40" />
-              <span aria-hidden className="absolute bottom-3 left-3 w-3 h-3 border-b border-l border-white/40" />
-              <span aria-hidden className="absolute bottom-3 right-3 w-3 h-3 border-b border-r border-white/40" />
-            </div>
-            <div className="space-y-6">
-              <div className="flex items-center gap-4 font-mono text-[10px] md:text-xs uppercase tracking-widest text-muted-foreground">
-                <span className="text-primary font-bold text-lg">0{project.id}</span>
-                <span className="w-12 h-[1px] bg-border"></span>
-                <span className="text-primary">{project.role}</span>
-              </div>
-              <div>
-                <p className="font-serif italic text-lg text-muted-foreground">{project.client}</p>
-                <h3 className="font-display text-3xl md:text-5xl font-bold uppercase tracking-tighter leading-tight mt-2">
-                  {project.title}
-                </h3>
-              </div>
-              <p className="text-base md:text-lg text-muted-foreground leading-relaxed font-sans font-light">
-                {project.description}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {project.tech.map(t => (
-                  <span key={t} className="px-2.5 py-1 bg-muted/50 border border-border text-muted-foreground font-mono text-[10px] uppercase tracking-wider rounded-md">
-                    {t}
-                  </span>
-                ))}
-              </div>
-              <div className="pt-4 flex flex-col sm:flex-row gap-4">
-                <a href={project.link} className="inline-flex items-center justify-between gap-4 group/link w-full sm:w-auto px-6 py-4 border border-foreground bg-foreground text-background hover:bg-background hover:text-foreground transition-colors rounded-full font-mono text-xs uppercase tracking-widest font-semibold min-h-[48px]">
-                  <span>Lihat Detail</span>
-                  <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
-                </a>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Desktop Sticky Layout (>=1024px) */}
-      <div 
-        ref={containerRef} 
-        className="hidden lg:block relative"
+      {/* Unified Sticky Scroll Layout — mobile + desktop */}
+      <div
+        ref={containerRef}
+        className="relative"
         style={{ height: `${projects.length * 100}vh` }}
       >
-        <div className="sticky top-0 h-screen flex items-center overflow-hidden">
+        <div className="sticky top-0 h-[100dvh] flex items-center overflow-hidden">
           
           {/* Progress Rail + Jump Dots */}
           <div className="absolute right-10 top-1/2 -translate-y-1/2 z-20 hidden xl:flex flex-col items-center gap-4">
@@ -214,11 +158,11 @@ export default function Work() {
             </ul>
           </div>
 
-          <div className="w-full px-24">
-            <div className="max-w-7xl mx-auto w-full grid grid-cols-12 gap-16 lg:gap-24 items-center">
-              
+          <div className="w-full px-6 md:px-12 lg:px-24">
+            <div className="max-w-7xl mx-auto w-full flex flex-col-reverse lg:grid lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-24 items-center">
+
               {/* Text Side */}
-              <div className="col-span-5 relative min-h-[560px] flex items-center pb-16">
+              <div className="lg:col-span-5 relative w-full min-h-0 lg:min-h-[560px] flex items-start lg:items-center pb-10 lg:pb-16">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeProject.id}
@@ -226,21 +170,21 @@ export default function Work() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                    className="w-full flex flex-col justify-center gap-7"
+                    className="w-full flex flex-col justify-center gap-4 sm:gap-5 lg:gap-7"
                   >
-                    <div className="flex items-center gap-4 font-mono text-xs uppercase tracking-widest text-muted-foreground relative">
-                      <motion.div 
+                    <div className="flex items-center gap-3 sm:gap-4 font-mono text-[10px] sm:text-xs uppercase tracking-widest text-muted-foreground relative">
+                      <motion.div
                         initial={{ scaleX: 0 }}
                         animate={{ scaleX: 1 }}
                         transition={{ duration: 0.5, delay: 0.2 }}
                         className="absolute -bottom-2 left-0 h-[2px] bg-primary w-8 origin-left"
                       />
-                      <span className="text-3xl font-display font-bold text-foreground leading-none">0{activeProject.id}</span>
-                      <span className="w-12 h-[1px] bg-border ml-2"></span>
-                      <span className="text-primary">{activeProject.role}</span>
+                      <span className="text-2xl sm:text-3xl font-display font-bold text-foreground leading-none">0{activeProject.id}</span>
+                      <span className="w-8 sm:w-12 h-[1px] bg-border ml-1 sm:ml-2"></span>
+                      <span className="text-primary truncate">{activeProject.role}</span>
                     </div>
 
-                    <div className="space-y-3 relative">
+                    <div className="space-y-2 sm:space-y-3 relative">
                       <div className="absolute inset-0 overflow-hidden pointer-events-none">
                         <motion.div
                           initial={{ x: "-100%" }}
@@ -249,34 +193,34 @@ export default function Work() {
                           className="absolute inset-0 bg-primary/20"
                         />
                       </div>
-                      <p className="font-serif italic text-xl text-muted-foreground relative">{activeProject.client}</p>
-                      <h3 className="font-display text-4xl xl:text-5xl 2xl:text-6xl font-bold uppercase tracking-tighter leading-[1] relative pb-1">
+                      <p className="font-serif italic text-base sm:text-lg lg:text-xl text-muted-foreground relative">{activeProject.client}</p>
+                      <h3 className="font-display text-3xl sm:text-4xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-bold uppercase tracking-tighter leading-[1] relative pb-1">
                         {activeProject.title}
                       </h3>
                     </div>
 
-                    <p className="text-base xl:text-lg text-muted-foreground leading-relaxed font-sans font-light max-w-md">
+                    <p className="text-sm sm:text-base lg:text-base xl:text-lg text-muted-foreground leading-relaxed font-sans font-light max-w-md line-clamp-3 sm:line-clamp-none">
                       {activeProject.description}
                     </p>
 
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
                       {activeProject.tech.map(t => (
-                        <span key={t} className="px-3 py-1 bg-muted/50 border border-border text-muted-foreground font-mono text-[10px] uppercase tracking-wider rounded-md">
+                        <span key={t} className="px-2 sm:px-3 py-1 bg-muted/50 border border-border text-muted-foreground font-mono text-[9px] sm:text-[10px] uppercase tracking-wider rounded-md">
                           {t}
                         </span>
                       ))}
                     </div>
 
-                    <div className="pt-2 flex items-center gap-6 flex-wrap">
+                    <div className="pt-1 sm:pt-2 flex items-center gap-4 sm:gap-6 flex-wrap">
                       <MagneticButton strength={0.4}>
                         <a href={activeProject.link} className="inline-flex items-center gap-3 group/link">
-                          <span className="w-14 h-14 rounded-full border border-border flex items-center justify-center group-hover/link:bg-foreground group-hover/link:text-background group-hover/link:border-foreground transition-all duration-300 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.3)]">
-                            <ArrowUpRight className="w-5 h-5 group-hover/link:rotate-45 transition-transform duration-300" />
+                          <span className="w-11 h-11 sm:w-14 sm:h-14 rounded-full border border-border flex items-center justify-center group-hover/link:bg-foreground group-hover/link:text-background group-hover/link:border-foreground transition-all duration-300 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.3)]">
+                            <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover/link:rotate-45 transition-transform duration-300" />
                           </span>
-                          <span className="font-mono text-sm uppercase tracking-widest font-semibold group-hover/link:translate-x-2 transition-transform duration-300">View Case</span>
+                          <span className="font-mono text-xs sm:text-sm uppercase tracking-widest font-semibold group-hover/link:translate-x-2 transition-transform duration-300">View Case</span>
                         </a>
                       </MagneticButton>
-                      <a href={activeProject.link} className="inline-flex items-center gap-2 group/link text-muted-foreground hover:text-foreground transition-colors font-mono text-xs uppercase tracking-widest">
+                      <a href={activeProject.link} className="hidden sm:inline-flex items-center gap-2 group/link text-muted-foreground hover:text-foreground transition-colors font-mono text-xs uppercase tracking-widest">
                         <span>Lihat Detail</span>
                         <ArrowRight className="w-3 h-3 group-hover/link:translate-x-1 transition-transform" />
                       </a>
@@ -284,8 +228,8 @@ export default function Work() {
                   </motion.div>
                 </AnimatePresence>
 
-                {/* Progress indicator */}
-                <div className="absolute bottom-2 left-0 flex gap-4 items-center">
+                {/* Progress indicator (mobile + desktop) */}
+                <div className="absolute -top-6 lg:top-auto lg:bottom-2 left-0 right-0 lg:right-auto flex justify-between lg:justify-start gap-4 items-center">
                   <div className="flex gap-1 font-mono text-[10px] text-muted-foreground items-center">
                     <span className="text-foreground font-bold text-sm">0{activeIndex + 1}</span>
                     <span className="opacity-50 mx-1">/</span>
@@ -293,16 +237,24 @@ export default function Work() {
                   </div>
                   {activeIndex < projects.length - 1 && (
                     <div className="flex items-center gap-2 text-[10px] font-mono text-muted-foreground/60 uppercase tracking-widest">
-                      <span className="w-8 h-[1px] bg-border"></span>
+                      <span className="w-6 sm:w-8 h-[1px] bg-border"></span>
                       <span>Scroll</span>
                       <ArrowDown className="w-3 h-3 animate-bounce" />
                     </div>
                   )}
                 </div>
+
+                {/* Mobile inline progress bar */}
+                <div className="lg:hidden absolute -top-2 left-0 right-0 h-[2px] bg-border/40 rounded-full overflow-hidden">
+                  <motion.div
+                    className="h-full bg-primary origin-left"
+                    style={{ scaleX: progressSpring }}
+                  />
+                </div>
               </div>
 
               {/* Image Side */}
-              <div className="col-span-7 relative h-[600px] flex items-center justify-end">
+              <div className="lg:col-span-7 relative w-full h-[38vh] sm:h-[42vh] lg:h-[600px] flex items-center justify-end">
                 {/* Giant stroke project number — sits behind image, slides in on change */}
                 <AnimatePresence mode="wait">
                   <motion.span
@@ -312,7 +264,7 @@ export default function Work() {
                     animate={{ opacity: 1, y: 0, x: 0 }}
                     exit={{ opacity: 0, y: -30, position: "absolute" }}
                     transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                    className="pointer-events-none absolute -left-12 top-1/2 -translate-y-1/2 font-display font-bold tracking-tighter text-stroke text-transparent select-none leading-none text-[18rem] xl:text-[22rem] z-0 opacity-90"
+                    className="hidden lg:block pointer-events-none absolute -left-12 top-1/2 -translate-y-1/2 font-display font-bold tracking-tighter text-stroke text-transparent select-none leading-none text-[18rem] xl:text-[22rem] z-0 opacity-90"
                   >
                     {String(activeProject.id).padStart(2, "0")}
                   </motion.span>
