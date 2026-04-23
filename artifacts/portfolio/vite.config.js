@@ -13,9 +13,8 @@ export default defineConfig({
     },
     dedupe: ["react", "react-dom"],
   },
-  root: path.resolve(__dirname),  // <-- PENTING: harus absolute path
   build: {
-    outDir: path.resolve(__dirname, "dist/public"),  // <-- outDir juga absolute
+    outDir: "dist/public",
     emptyOutDir: true,
     chunkSizeWarningLimit: 1000,
   },
