@@ -18,14 +18,21 @@ export default function About() {
     <section id="about" className="relative bg-card overflow-hidden">
       <SectionHeader number="01" eyebrow="THE PERSONA" title="ABOUT" />
 
-      <div className="py-24 md:py-32 px-6 md:px-12 lg:px-24" ref={ref}>
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-[1fr_1.5fr] gap-16 lg:gap-24 items-center">
+      <div className="py-24 md:py-32 px-6 md:px-12 lg:px-24 relative" ref={ref}>
+        {/* Giant outlined backdrop typography */}
+        <div aria-hidden className="pointer-events-none absolute -top-4 right-6 md:right-12 lg:right-24 select-none">
+          <span className="font-display font-bold uppercase tracking-tighter text-stroke leading-none text-[18vw] md:text-[14vw] lg:text-[12vw] opacity-[0.07]">
+            EJP.
+          </span>
+        </div>
+
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-[1fr_1.5fr] gap-16 lg:gap-24 items-center relative z-10">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            className="relative w-full aspect-[3/4] mx-auto lg:mx-0 overflow-hidden bg-muted group rounded-sm"
+            className="relative w-full aspect-[3/4] mx-auto lg:mx-0 overflow-hidden bg-muted group rounded-sm ring-1 ring-border/50 shadow-[0_30px_60px_-30px_rgba(0,0,0,0.35)]"
           >
             <motion.div style={{ y: imageY, height: "120%", top: "-10%" }} className="absolute inset-0 w-full">
               <img 
@@ -35,16 +42,35 @@ export default function About() {
               />
             </motion.div>
             <div className="absolute inset-0 bg-foreground/5 pointer-events-none mix-blend-overlay" />
-            
-            <div className="absolute bottom-6 left-6 right-6 backdrop-blur-xl bg-background/60 border border-border/30 p-4 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out rounded-sm">
+
+            {/* Always-visible top metadata strip */}
+            <div className="absolute top-4 left-4 right-4 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.2em] text-white mix-blend-difference">
+              <span className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                ©EJP / 2026
+              </span>
+              <span>ID_BDL · 05°25'S</span>
+            </div>
+
+            {/* Corner crosshair markers */}
+            <span aria-hidden className="absolute top-3 left-3 w-3 h-3 border-t border-l border-white/40" />
+            <span aria-hidden className="absolute top-3 right-3 w-3 h-3 border-t border-r border-white/40" />
+            <span aria-hidden className="absolute bottom-3 left-3 w-3 h-3 border-b border-l border-white/40" />
+            <span aria-hidden className="absolute bottom-3 right-3 w-3 h-3 border-b border-r border-white/40" />
+
+            {/* Bottom info card on hover */}
+            <div className="absolute bottom-6 left-6 right-6 backdrop-blur-xl bg-background/70 border border-border/30 p-4 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out rounded-sm">
               <div className="flex items-center justify-between text-foreground">
-                <span className="font-mono text-xs uppercase tracking-widest font-semibold">Edu Juanda Pratama</span>
-                <span className="font-mono text-[10px] text-primary border border-primary/30 px-2 py-1 rounded-full">ID_BDL</span>
+                <div className="flex flex-col">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Subject</span>
+                  <span className="font-display text-base font-bold uppercase tracking-tight">Edu Juanda Pratama</span>
+                </div>
+                <span className="font-mono text-[10px] text-primary border border-primary/30 px-2 py-1 rounded-full">FULL STACK</span>
               </div>
             </div>
           </motion.div>
 
-          <div className="space-y-12">
+          <div className="space-y-12 relative">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}

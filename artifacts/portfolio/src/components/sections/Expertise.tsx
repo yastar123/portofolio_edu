@@ -2,27 +2,60 @@ import { motion, useInView } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 
-const skills = [
+type SkillItem = { name: string; level: "Expert" | "Advanced" | "Proficient" };
+
+const skills: { category: string; description: string; items: SkillItem[] }[] = [
   {
     category: "Frontend",
     description: "Membangun antarmuka interaktif dan responsif",
-    items: ["ReactJS", "Next.js", "InertiaJS", "TailwindCSS", "HTML5/CSS3", "JavaScript (ES6+)", "TypeScript", "Figma-to-Code"]
+    items: [
+      { name: "ReactJS", level: "Expert" },
+      { name: "Next.js", level: "Advanced" },
+      { name: "InertiaJS", level: "Advanced" },
+      { name: "TailwindCSS", level: "Expert" },
+      { name: "HTML5/CSS3", level: "Expert" },
+      { name: "JavaScript (ES6+)", level: "Expert" },
+      { name: "TypeScript", level: "Advanced" },
+      { name: "Figma-to-Code", level: "Advanced" },
+    ],
   },
   {
     category: "Backend & DB",
     description: "Arsitektur server dan manajemen data",
-    items: ["Laravel", "Node.js", "REST API", "PHP", "MySQL", "PostgreSQL", "MongoDB"]
+    items: [
+      { name: "Laravel", level: "Expert" },
+      { name: "Node.js", level: "Advanced" },
+      { name: "REST API", level: "Expert" },
+      { name: "PHP", level: "Advanced" },
+      { name: "MySQL", level: "Advanced" },
+      { name: "PostgreSQL", level: "Advanced" },
+      { name: "MongoDB", level: "Proficient" },
+    ],
   },
   {
     category: "Tools & CMS",
     description: "Alat pendukung siklus pengembangan",
-    items: ["Git", "WordPress", "Statamic", "Figma", "Adobe Premiere Pro", "CapCut", "Canva"]
+    items: [
+      { name: "Git", level: "Expert" },
+      { name: "WordPress", level: "Advanced" },
+      { name: "Statamic", level: "Proficient" },
+      { name: "Figma", level: "Advanced" },
+      { name: "Adobe Premiere Pro", level: "Proficient" },
+      { name: "CapCut", level: "Proficient" },
+      { name: "Canva", level: "Advanced" },
+    ],
   },
   {
     category: "Practices",
     description: "Standar industri dan metodologi",
-    items: ["Clean Code", "UX-focused", "Unit Testing", "SEO Optimization", "Team Leadership"]
-  }
+    items: [
+      { name: "Clean Code", level: "Expert" },
+      { name: "UX-focused", level: "Advanced" },
+      { name: "Unit Testing", level: "Proficient" },
+      { name: "SEO Optimization", level: "Advanced" },
+      { name: "Team Leadership", level: "Advanced" },
+    ],
+  },
 ];
 
 function SpotlightCard({ children, className = "" }: { children: React.ReactNode, className?: string }) {
@@ -157,21 +190,37 @@ export default function Expertise() {
                       {skillGroup.description}
                     </p>
                     
-                    <div className="flex flex-wrap gap-3">
-                      {skillGroup.items.map((item, i) => (
-                        <motion.div 
-                          key={item} 
-                          whileHover={{ scale: 1.05, y: -5 }}
-                          transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                          className="px-4 py-2.5 border border-background/20 rounded-full font-mono text-xs uppercase tracking-widest text-background/80 hover:bg-background hover:text-foreground hover:border-background transition-colors cursor-default relative group"
-                        >
-                          {item}
-                          <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-3 py-1 text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
-                            Experienced
-                            <div className="absolute bottom-[-4px] left-1/2 -translate-x-1/2 w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[4px] border-t-primary" />
-                          </div>
-                        </motion.div>
-                      ))}
+                    <div className="flex flex-wrap gap-2.5">
+                      {skillGroup.items.map((item) => {
+                        const dots =
+                          item.level === "Expert" ? 3 : item.level === "Advanced" ? 2 : 1;
+                        return (
+                          <motion.div
+                            key={item.name}
+                            whileHover={{ scale: 1.04, y: -3 }}
+                            transition={{ type: "spring", stiffness: 400, damping: 14 }}
+                            className="group/chip relative inline-flex items-center gap-2.5 pl-3 pr-3.5 py-2 border border-background/20 rounded-full font-mono text-[11px] uppercase tracking-[0.18em] text-background/80 hover:bg-background hover:text-foreground hover:border-background transition-colors cursor-default"
+                          >
+                            <span className="flex items-center gap-1" aria-label={`${item.level} level`}>
+                              {[0, 1, 2].map((i) => (
+                                <span
+                                  key={i}
+                                  className={`w-1 h-1 rounded-full transition-colors ${
+                                    i < dots
+                                      ? "bg-primary"
+                                      : "bg-background/25 group-hover/chip:bg-foreground/20"
+                                  }`}
+                                />
+                              ))}
+                            </span>
+                            <span>{item.name}</span>
+                            <span className="absolute -top-9 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-2.5 py-1 text-[9px] tracking-[0.15em] rounded opacity-0 group-hover/chip:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-lg">
+                              {item.level.toUpperCase()}
+                              <span className="absolute bottom-[-4px] left-1/2 -translate-x-1/2 w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[4px] border-t-primary" />
+                            </span>
+                          </motion.div>
+                        );
+                      })}
                     </div>
                   </div>
                 </SpotlightCard>
