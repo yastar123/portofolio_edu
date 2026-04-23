@@ -8,53 +8,163 @@ import { Tilt3D } from "@/components/ui/Tilt3D";
 const projects = [
   {
     id: 1,
-    title: "Winnicode News Portal",
+    title: "Rental PS Website",
     role: "Full Stack Developer",
-    tech: ["Next.js", "PostgreSQL", "TailwindCSS"],
+    tech: ["Web Development", "Booking System", "UI/UX"],
     image: "/images/project-1.png",
-    description: "Portal berita interaktif dengan sistem manajemen data yang tangguh. Pengembangan end-to-end dengan fokus pada performa dan keamanan data berita.",
-    client: "PT. Winnicode Garuda Indonesia",
-    link: "#"
+    description: "Website rental PlayStation dengan sistem booking online. Fitur lengkap untuk manajemen penyewaan dan tracking unit PS.",
+    client: "Rental PS Service",
+    link: "https://rental-ps-gray.vercel.app/"
   },
   {
     id: 2,
-    title: "KM ITERA Web Platform",
-    role: "Staff IT Ministry",
-    tech: ["Laravel", "ReactJS", "InertiaJS"],
-    image: "/images/project-6.png",
-    description: "Redesign dan pengembangan ulang platform website untuk Keluarga Mahasiswa ITERA. Mengintegrasikan frontend dan backend secara efisien menggunakan InertiaJS.",
-    client: "Kabinet KM ITERA",
-    link: "#"
+    title: "Ayam Geprek Website",
+    role: "Web Developer",
+    tech: ["Frontend", "Food Ordering", "Responsive Design"],
+    image: "/images/project-2.png",
+    description: "Website restoran ayam geprek dengan menu interaktif dan sistem pesan antar online.",
+    client: "Ayam Geprek Restaurant",
+    link: "https://ayam-geprek-theta.vercel.app/"
   },
   {
     id: 3,
-    title: "PPLK ITERA 2025",
-    role: "KaSub Frontend",
-    tech: ["React.js", "Laravel API", "Figma"],
+    title: "Barbershop Website",
+    role: "Frontend Developer",
+    tech: ["Booking System", "Service Display", "Mobile First"],
     image: "/images/project-3.png",
-    description: "Memimpin tim frontend untuk website kegiatan orientasi mahasiswa baru. Mengarahkan integrasi teknis dan memastikan interaktivitas komponen berjalan lancar.",
-    client: "PPLK ITERA",
-    link: "#"
+    description: "Platform booking untuk barbershop dengan sistem janji temu dan galeri hasil kerja.",
+    client: "Local Barbershop",
+    link: "https://babershop-eight.vercel.app/"
   },
   {
     id: 4,
-    title: "PEMIRA KM E-Voting",
-    role: "Head of IMTEK",
-    tech: ["Web Tech", "Security", "Database"],
+    title: "PT SEIIKI Corporate Website",
+    role: "Full Stack Developer",
+    tech: ["Corporate Web", "CMS", "Professional Design"],
     image: "/images/project-4.png",
-    description: "Sistem e-voting aman untuk pemilihan presiden mahasiswa. Mengkoordinasikan sub-divisi voting dan pusat data untuk memastikan integritas pemilihan.",
-    client: "PEMIRA KM ITERA",
-    link: "#"
+    description: "Website corporate profesional untuk PT SEIIIKI dengan fitur company profile dan layanan lengkap.",
+    client: "PT SEIIKI",
+    link: "https://seyiki.com/"
   },
   {
     id: 5,
-    title: "BidanPreneur",
-    role: "Head of Web / Dev",
-    tech: ["WordPress", "SEO", "Custom Themes"],
+    title: "EPIC 2026 Conference",
+    role: "Web Developer",
+    tech: ["Event Platform", "Registration", "Academic Portal"],
     image: "/images/project-5.png",
-    description: "Platform komunitas untuk bidan entrepreneur. Melakukan optimasi SEO dan kustomisasi tema/plugin untuk mendukung pertumbuhan organik.",
-    client: "BidanPreneur",
+    description: "Website konferensi internasional Engineering Physics dengan sistem registrasi dan informasi acara.",
+    client: "EPIC 2026 Committee",
+    link: "http://epic.itera.ac.id/"
+  },
+  {
+    id: 6,
+    title: "SEIIKI Survey System",
+    role: "Full Stack Developer",
+    tech: ["Survey Platform", "Data Analytics", "Form Builder"],
+    image: "/images/project-6.png",
+    description: "Platform survei online untuk PT SEIIIKI dengan dashboard analitik dan reporting real-time.",
+    client: "PT SEIIKI",
+    link: "https://survei.seyiki.com/"
+  },
+  {
+    id: 7,
+    title: "SEIIKI Document Management",
+    role: "Backend Developer",
+    tech: ["Document System", "File Management", "Security"],
+    image: "/images/project-7.png",
+    description: "Sistem penyimpanan dan management dokumen untuk PT SEIIIKI dengan kontrol akses yang aman.",
+    client: "PT SEIIKI",
+    link: "http://docs.seyiki.com/"
+  },
+  {
+    id: 8,
+    title: "KM-ITERA Platform",
+    role: "Full Stack Developer",
+    tech: ["Community Platform", "Student Portal", "Integration"],
+    image: "/images/project-8.png",
+    description: "Platform komunitas mahasiswa ITERA dengan berbagai fitur organisasi dan kegiatan kemahasiswaan.",
+    client: "KM ITERA",
+    link: "https://www.km-itera.com/"
+  },
+  {
+    id: 9,
+    title: "Candidate College Platform",
+    role: "Full Stack Developer",
+    tech: ["Education Platform", "Learning Management", "Student Portal"],
+    image: "/images/project-9.png",
+    description: "Platform edukasi untuk persiapan kuliah dengan materi pembelajaran dan tes online.",
+    client: "Candidate College",
+    link: "https://candidate-college.vercel.app/"
+  },
+  {
+    id: 10,
+    title: "PPLK ITERA 2025",
+    role: "Frontend Lead",
+    tech: ["Event Platform", "Student Orientation", "React.js"],
+    image: "/images/project-10.png",
+    description: "Website orientasi mahasiswa baru ITERA 2025 dengan informasi lengkap dan registrasi online.",
+    client: "PPLK ITERA 2025",
+    link: "http://pplkitera.com/"
+  },
+  {
+    id: 11,
+    title: "PPLK ITERA 2024",
+    role: "Frontend Developer",
+    tech: ["Event Website", "Registration System", "Mobile Responsive"],
+    image: "/images/project-11.png",
+    description: "Platform orientasi mahasiswa baru ITERA 2024 dengan sistem registrasi dan jadwal kegiatan.",
+    client: "PPLK ITERA 2024",
+    link: "http://pplkitera.com/"
+  },
+  {
+    id: 12,
+    title: "IoT Monitoring System",
+    role: "IoT Developer",
+    tech: ["IoT Platform", "Device Control", "Real-time Monitoring"],
+    image: "/images/project-12.png",
+    description: "Sistem monitoring dan kontrol lampu serta AC untuk UNILA menggunakan teknologi IoT.",
+    client: "Universitas Lampung",
+    link: "https://iot.seyiki.com/login"
+  },
+  {
+    id: 13,
+    title: "Webcipta Agency",
+    role: "Full Stack Developer",
+    tech: ["Agency Website", "Service Portfolio", "Contact System"],
+    image: "/images/project-13.png",
+    description: "Website agency untuk jasa pembuatan website dan aplikasi dengan portfolio lengkap.",
+    client: "Webcipta Agency",
+    link: "https://web-cipta1.vercel.app/"
+  },
+  {
+    id: 14,
+    title: "PEMIRA KM E-Voting",
+    role: "System Developer",
+    tech: ["E-Voting System", "Security", "Real-time Results"],
+    image: "/images/project-14.png",
+    description: "Sistem e-voting untuk pemilihan presiden mahasiswa ITERA 2026 dengan keamanan tinggi.",
+    client: "PEMIRA KM ITERA",
+    link: "https://pemira-km-itera.my.id/"
+  },
+  {
+    id: 15,
+    title: "Travel WhatsApp Integration",
+    role: "Web Developer",
+    tech: ["WhatsApp API", "Booking System", "Tourism"],
+    image: "/images/project-15.png",
+    description: "Website travel dengan integrasi langsung ke WhatsApp untuk konsultasi dan pemesanan.",
+    client: "Travel Agency",
     link: "#"
+  },
+  {
+    id: 16,
+    title: "Connect Printing Coupon",
+    role: "Full Stack Developer",
+    tech: ["Coupon System", "Validation", "Printing Service"],
+    image: "/images/project-16.png",
+    description: "Sistem validasi kupon untuk layanan printing dengan tracking dan management promo.",
+    client: "Connect Printing",
+    link: "https://connectprinting.online/"
   }
 ];
 
