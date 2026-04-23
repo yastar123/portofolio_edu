@@ -247,9 +247,9 @@ export default function Hero() {
 
       <Marquee />
 
-      <motion.div 
+      <motion.div
         style={{ opacity }}
-        className="absolute bottom-16 md:bottom-24 right-6 md:right-12 lg:right-24 flex flex-col items-center gap-4 text-[10px] font-mono uppercase tracking-widest text-muted-foreground hidden md:flex"
+        className="absolute bottom-20 md:bottom-28 right-6 md:right-12 lg:right-24 hidden md:flex flex-col items-center gap-4 text-[10px] font-mono uppercase tracking-widest text-muted-foreground"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 1 }}

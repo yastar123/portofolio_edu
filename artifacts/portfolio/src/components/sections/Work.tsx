@@ -109,7 +109,7 @@ export default function Work() {
       </div>
 
       {/* Mobile Stacked Layout (<1024px) */}
-      <div className="block lg:hidden px-6 md:px-12 pb-24 space-y-24">
+      <div className="block lg:hidden px-6 md:px-12 pb-24 space-y-20">
         {projects.map((project, i) => (
           <div key={project.id} className="flex flex-col gap-8">
             <div className="overflow-hidden bg-muted aspect-[4/3] md:aspect-video rounded-sm relative group">
@@ -173,7 +173,7 @@ export default function Work() {
             <div className="max-w-7xl mx-auto w-full grid grid-cols-12 gap-16 lg:gap-24 items-center">
               
               {/* Text Side */}
-              <div className="col-span-5 relative h-[500px] flex items-center">
+              <div className="col-span-5 relative min-h-[560px] flex items-center pb-16">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeProject.id}
@@ -181,7 +181,7 @@ export default function Work() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                    className="absolute inset-0 flex flex-col justify-center space-y-8"
+                    className="w-full flex flex-col justify-center gap-7"
                   >
                     <div className="flex items-center gap-4 font-mono text-xs uppercase tracking-widest text-muted-foreground relative">
                       <motion.div 
@@ -194,25 +194,27 @@ export default function Work() {
                       <span className="w-12 h-[1px] bg-border ml-2"></span>
                       <span className="text-primary">{activeProject.role}</span>
                     </div>
-                    
-                    <div className="space-y-4 relative overflow-hidden">
-                      <motion.div 
-                        initial={{ x: "-100%" }}
-                        animate={{ x: "100%" }}
-                        transition={{ duration: 0.5, ease: "easeInOut" }}
-                        className="absolute inset-0 bg-primary/20 z-10"
-                      />
-                      <p className="font-serif italic text-xl text-muted-foreground">{activeProject.client}</p>
-                      <h3 className="font-display text-5xl xl:text-6xl font-bold uppercase tracking-tighter leading-[0.9]">
+
+                    <div className="space-y-3 relative">
+                      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                        <motion.div
+                          initial={{ x: "-100%" }}
+                          animate={{ x: "100%" }}
+                          transition={{ duration: 0.5, ease: "easeInOut" }}
+                          className="absolute inset-0 bg-primary/20"
+                        />
+                      </div>
+                      <p className="font-serif italic text-xl text-muted-foreground relative">{activeProject.client}</p>
+                      <h3 className="font-display text-4xl xl:text-5xl 2xl:text-6xl font-bold uppercase tracking-tighter leading-[1] relative pb-1">
                         {activeProject.title}
                       </h3>
                     </div>
-                    
-                    <p className="text-lg text-muted-foreground leading-relaxed font-sans font-light max-w-md">
+
+                    <p className="text-base xl:text-lg text-muted-foreground leading-relaxed font-sans font-light max-w-md">
                       {activeProject.description}
                     </p>
 
-                    <div className="flex flex-wrap gap-2 pt-2">
+                    <div className="flex flex-wrap gap-2">
                       {activeProject.tech.map(t => (
                         <span key={t} className="px-3 py-1 bg-muted/50 border border-border text-muted-foreground font-mono text-[10px] uppercase tracking-wider rounded-md">
                           {t}
@@ -220,7 +222,7 @@ export default function Work() {
                       ))}
                     </div>
 
-                    <div className="pt-6 flex items-center gap-6">
+                    <div className="pt-2 flex items-center gap-6 flex-wrap">
                       <a href={activeProject.link} className="inline-flex items-center gap-3 group/link">
                         <span className="w-12 h-12 rounded-full border border-border flex items-center justify-center group-hover/link:bg-foreground group-hover/link:text-background group-hover/link:border-foreground transition-all duration-300">
                           <ArrowUpRight className="w-5 h-5 group-hover/link:rotate-45 transition-transform duration-300" />
@@ -234,9 +236,9 @@ export default function Work() {
                     </div>
                   </motion.div>
                 </AnimatePresence>
-                
+
                 {/* Progress indicator */}
-                <div className="absolute bottom-0 left-0 flex gap-4 items-center">
+                <div className="absolute bottom-2 left-0 flex gap-4 items-center">
                   <div className="flex gap-1 font-mono text-[10px] text-muted-foreground items-center">
                     <span className="text-foreground font-bold text-sm">0{activeIndex + 1}</span>
                     <span className="opacity-50 mx-1">/</span>

@@ -108,17 +108,18 @@ function CornerAnnotations() {
 
   return (
     <>
-      <div className="hidden md:block fixed top-4 left-4 md:top-8 md:left-8 font-mono text-[10px] uppercase tracking-widest text-muted-foreground/50 z-40 mix-blend-difference pointer-events-none select-none">
-        EJP / 2026
+      {/* Bottom-left meta — keeps top clear for the navbar */}
+      <div className="hidden md:flex fixed bottom-6 left-6 lg:bottom-8 lg:left-12 font-mono text-[10px] uppercase tracking-widest text-muted-foreground/60 z-40 mix-blend-difference pointer-events-none select-none items-center gap-3">
+        <span>EJP / 2026</span>
+        <span className="w-6 h-[1px] bg-muted-foreground/30" />
+        <span>BDL — GMT+7</span>
       </div>
-      <div className="hidden md:block fixed top-4 right-4 md:top-8 md:right-8 font-mono text-[10px] uppercase tracking-widest text-muted-foreground/50 z-40 mix-blend-difference pointer-events-none select-none">
-        BDL — GMT+7
-      </div>
-      <div className="fixed bottom-4 right-4 md:bottom-8 md:right-8 font-mono text-[10px] uppercase tracking-widest text-muted-foreground/50 z-40 mix-blend-difference flex items-center gap-2 pointer-events-none select-none">
-        <div className="hidden md:block w-12 h-[1px] bg-muted-foreground/20">
-          <motion.div className="h-full bg-primary" style={{ scaleX, originX: 0 }} />
+      {/* Bottom-right scroll progress */}
+      <div className="fixed bottom-6 right-6 lg:bottom-8 lg:right-12 font-mono text-[10px] uppercase tracking-widest text-muted-foreground/70 z-40 mix-blend-difference flex items-center gap-3 pointer-events-none select-none">
+        <div className="hidden md:block w-16 h-[1px] bg-muted-foreground/25">
+          <motion.div className="h-full bg-primary origin-left" style={{ scaleX }} />
         </div>
-        <span>{progress}%</span>
+        <span className="tabular-nums">{progress.toString().padStart(2, "0")}%</span>
       </div>
     </>
   );
