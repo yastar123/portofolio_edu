@@ -1,8 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { MapPin, Mail, Phone, ExternalLink } from "lucide-react";
+import { MapPin, Mail, ExternalLink, Linkedin as SiLinkedin } from "lucide-react";
 import { useRef } from "react";
-import { SiGithub, SiWhatsapp } from "react-icons/si";
-import { Linkedin as SiLinkedin } from "lucide-react";
+import { SiWhatsapp } from "react-icons/si";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 
 export default function About() {
@@ -13,25 +12,30 @@ export default function About() {
   });
 
   const imageY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
+  const backdropX = useTransform(scrollYProgress, [0, 1], ["8%", "-12%"]);
 
   return (
     <section id="about" className="relative bg-card overflow-hidden">
       <SectionHeader number="01" eyebrow="THE PERSONA" title="ABOUT" />
 
       <div className="py-24 md:py-32 px-6 md:px-12 lg:px-24 relative" ref={ref}>
-        {/* Giant outlined backdrop typography */}
-        <div aria-hidden className="pointer-events-none absolute -top-4 right-6 md:right-12 lg:right-24 select-none">
+        {/* Giant outlined backdrop typography (parallax) */}
+        <motion.div
+          aria-hidden
+          style={{ x: backdropX }}
+          className="pointer-events-none absolute -top-4 right-6 md:right-12 lg:right-24 select-none will-change-transform"
+        >
           <span className="font-display font-bold uppercase tracking-tighter text-stroke leading-none text-[18vw] md:text-[14vw] lg:text-[12vw] opacity-[0.07]">
             EJP.
           </span>
-        </div>
+        </motion.div>
 
         <div className="max-w-7xl mx-auto grid lg:grid-cols-[1fr_1.5fr] gap-16 lg:gap-24 items-center relative z-10">
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
+            whileInView={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
             className="relative w-full aspect-[3/4] mx-auto lg:mx-0 overflow-hidden bg-muted group rounded-sm ring-1 ring-border/50 shadow-[0_30px_60px_-30px_rgba(0,0,0,0.35)]"
           >
             <motion.div style={{ y: imageY, height: "120%", top: "-10%" }} className="absolute inset-0 w-full">
@@ -68,6 +72,23 @@ export default function About() {
                 <span className="font-mono text-[10px] text-primary border border-primary/30 px-2 py-1 rounded-full">FULL STACK</span>
               </div>
             </div>
+
+            {/* Floating stat badge — bottom-right (always visible) */}
+            <motion.div
+              initial={{ opacity: 0, x: 20, y: 20 }}
+              whileInView={{ opacity: 1, x: 0, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute -bottom-4 -right-4 md:-bottom-6 md:-right-6 bg-background border border-border/60 rounded-sm shadow-[0_18px_40px_-18px_rgba(0,0,0,0.35)] px-4 py-3 md:px-5 md:py-4 z-20 group-hover:opacity-0 group-hover:translate-y-2 transition-all duration-500"
+            >
+              <div className="flex items-baseline gap-3">
+                <span className="font-display text-3xl md:text-4xl font-bold tracking-tighter leading-none">3<span className="text-primary">+</span></span>
+                <div className="flex flex-col">
+                  <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-muted-foreground leading-tight">Years</span>
+                  <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-muted-foreground leading-tight">Building</span>
+                </div>
+              </div>
+            </motion.div>
           </motion.div>
 
           <div className="space-y-12 relative">
@@ -78,6 +99,10 @@ export default function About() {
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="space-y-8"
             >
+              <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
+                <span className="w-8 h-[1px] bg-primary" />
+                Manifesto · 01
+              </div>
               <h3 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tighter leading-[0.95]">
                 Architecting <br />
                 <span className="italic font-serif lowercase text-primary tracking-normal">Clean</span> Digital <br />
@@ -99,54 +124,40 @@ export default function About() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4, duration: 1 }}
-              className="grid sm:grid-cols-2 md:grid-cols-2 gap-8 pt-12 border-t border-border/50"
+              className="grid sm:grid-cols-2 md:grid-cols-2 gap-px bg-border/40 rounded-sm overflow-hidden border border-border/40 mt-6"
             >
-              <div className="space-y-4 group">
-                <MapPin className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
-                <div>
-                  <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest mb-1 border-b border-border/30 inline-block pb-1">Base</p>
-                  <p className="font-display text-xl font-bold mt-2">Bandar Lampung</p>
-                </div>
-              </div>
-              
-              <div className="space-y-4 group">
-                <Mail className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
-                <div>
-                  <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest mb-1 border-b border-border/30 inline-block pb-1">Email</p>
-                  <a href="mailto:yastariskandar@gmail.com" className="flex items-center gap-2 font-display text-xl font-bold mt-2 hover:text-primary transition-colors break-all">
-                    yastariskandar@gmail.com
-                  </a>
-                </div>
-              </div>
-              
-              <div className="space-y-4 group">
-                <SiWhatsapp className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
-                <div>
-                  <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest mb-1 border-b border-border/30 inline-block pb-1">WhatsApp</p>
-                  <a href="https://wa.me/6285366195381" target="_blank" rel="noopener noreferrer" className="font-display text-xl font-bold mt-2 hover:text-primary transition-colors flex items-center gap-2">
-                    +62 853 6619 5381
-                    <ExternalLink className="w-4 h-4 opacity-50" />
-                  </a>
-                </div>
-              </div>
-
-              <div className="space-y-4 group">
-                <div className="flex gap-4">
-                  <SiLinkedin className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
-                  <SiGithub className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
-                </div>
-                <div>
-                  <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest mb-1 border-b border-border/30 inline-block pb-1">Socials</p>
-                  <div className="flex items-center gap-4 mt-2">
-                    <a href="https://www.linkedin.com/in/edu-juanda-pratama-861249297/" target="_blank" rel="noopener noreferrer" className="font-display text-xl font-bold hover:text-primary transition-colors flex items-center gap-1">
-                      LinkedIn <ExternalLink className="w-4 h-4 opacity-50" />
-                    </a>
-                    <a href="https://github.com/yastar123" target="_blank" rel="noopener noreferrer" className="font-display text-xl font-bold hover:text-primary transition-colors flex items-center gap-1">
-                      GitHub <ExternalLink className="w-4 h-4 opacity-50" />
-                    </a>
+              {[
+                { Icon: MapPin, label: "Base", value: "Bandar Lampung", href: undefined as string | undefined },
+                { Icon: Mail, label: "Email", value: "yastariskandar@gmail.com", href: "mailto:yastariskandar@gmail.com" },
+                { Icon: SiWhatsapp, label: "WhatsApp", value: "+62 853 6619 5381", href: "https://wa.me/6285366195381" },
+                { Icon: SiLinkedin, label: "LinkedIn", value: "in/edu-juanda-pratama", href: "https://www.linkedin.com/in/edu-juanda-pratama-861249297/" },
+              ].map(({ Icon, label, value, href }) => {
+                const Inner = (
+                  <div className="relative h-full p-5 md:p-6 bg-card group cursor-default overflow-hidden">
+                    <div aria-hidden className="absolute inset-0 bg-muted/0 group-hover:bg-muted/40 transition-colors duration-500" />
+                    <span aria-hidden className="absolute left-0 top-0 h-[2px] w-0 bg-primary group-hover:w-full transition-all duration-700 ease-[cubic-bezier(0.76,0,0.24,1)]" />
+                    <div className="relative flex flex-col gap-4">
+                      <div className="flex items-center justify-between">
+                        <Icon className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:-rotate-12 transition-all duration-300" />
+                        {href && (
+                          <ExternalLink className="w-3.5 h-3.5 text-muted-foreground/60 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                        )}
+                      </div>
+                      <div>
+                        <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest mb-1.5">{label}</p>
+                        <p className="font-display text-base md:text-lg font-bold tracking-tight break-all group-hover:text-primary transition-colors">
+                          {value}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
+                );
+                return href ? (
+                  <a key={label} href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer" className="block">{Inner}</a>
+                ) : (
+                  <div key={label}>{Inner}</div>
+                );
+              })}
             </motion.div>
           </div>
         </div>
