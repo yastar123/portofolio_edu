@@ -21,6 +21,11 @@ export default defineConfig({
     outDir: "dist/public",
     emptyOutDir: true,
     chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+      },
+    },
   },
   server: {
     port: 3000,
