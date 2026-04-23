@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { SiGithub, SiWhatsapp } from "react-icons/si";
 import { Linkedin as SiLinkedin } from "lucide-react";
 import { MagneticButton } from "@/components/ui/MagneticButton";
+import { SignatureMark } from "@/components/ui/SignatureMark";
 
 function Clock() {
   const [time, setTime] = useState(new Date());
@@ -57,6 +58,14 @@ export default function Footer() {
             <div className="inline-flex items-center gap-2 px-3 py-1.5 border border-background/20 rounded-full">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
               <span className="font-mono text-xs uppercase tracking-widest text-background/80">Available for work — Q2 2026</span>
+            </div>
+
+            <div className="pt-4 flex flex-col gap-2">
+              <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-background/40 flex items-center gap-2">
+                <span className="w-6 h-[1px] bg-background/30" />
+                Signed,
+              </span>
+              <SignatureMark className="w-44 h-16 text-background/85" />
             </div>
           </div>
           

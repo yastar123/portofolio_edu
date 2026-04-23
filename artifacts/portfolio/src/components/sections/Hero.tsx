@@ -6,6 +6,8 @@ import { Linkedin as SiLinkedin } from "lucide-react";
 import { Mail } from "lucide-react";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { RotatingTagline } from "@/components/ui/RotatingTagline";
+import { LiveWaveBadge } from "@/components/ui/LiveWaveBadge";
+import { StarField } from "@/components/ui/StarField";
 
 function KineticText({ text, delay = 0, yOffset = "100%", mouseX, mouseY }: { text: string, delay?: number, yOffset?: string, mouseX: any, mouseY: any }) {
   // Parallax effect based on mouse position (hooks always called for stable order)
@@ -112,6 +114,9 @@ export default function Hero() {
       {/* Subtle grid backdrop */}
       <div className="absolute inset-0 bg-grid pointer-events-none [mask-image:radial-gradient(ellipse_at_center,_black_30%,_transparent_75%)]" />
 
+      {/* Twinkling star field — subtle depth */}
+      <StarField count={32} className="opacity-60 [mask-image:radial-gradient(ellipse_at_center,_black_40%,_transparent_80%)]" />
+
       {/* Background ambient aurora */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
@@ -153,19 +158,7 @@ export default function Hero() {
           transition={{ duration: 1, delay: 1, ease: [0.16, 1, 0.3, 1] }}
           className="flex flex-wrap items-center gap-4 mb-8 md:mb-12"
         >
-          <a href="https://wa.me/6285366195381" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-4 py-2 bg-muted/80 backdrop-blur-sm rounded-full border border-border/50 group hover:border-primary/50 transition-colors">
-            <div className="relative flex h-2 w-2 items-center justify-center">
-              <motion.span 
-                animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0.2, 0.5] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute inline-flex h-full w-full rounded-full bg-primary"
-              ></motion.span>
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary"></span>
-            </div>
-            <span className="font-mono text-[10px] md:text-xs uppercase tracking-widest text-muted-foreground group-hover:text-foreground transition-colors">
-              Currently building @ Freelance + KM ITERA
-            </span>
-          </a>
+          <LiveWaveBadge href="https://wa.me/6285366195381" />
         </motion.div>
         
         <h1 className="text-[clamp(3rem,14vw,12rem)] md:text-[11vw] lg:text-[10vw] leading-[0.8] font-display font-bold uppercase tracking-tighter flex flex-col gap-1 md:gap-3 relative">
