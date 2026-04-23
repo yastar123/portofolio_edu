@@ -5,10 +5,7 @@ import path from "path";
 
 export default defineConfig({
   base: "/",
-  plugins: [
-    react(),
-    tailwindcss(),
-  ],
+  plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
@@ -21,9 +18,6 @@ export default defineConfig({
     outDir: "dist/public",
     emptyOutDir: true,
     chunkSizeWarningLimit: 1000,
-    rollupOptions: {
-      input: path.resolve(__dirname, "entry.js"),
-    },
   },
   server: {
     port: 3000,
